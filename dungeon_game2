@@ -1,0 +1,1097 @@
+import os
+import random
+import colorama
+from colorama import Fore, Back, Style
+
+
+#
+# add monsters
+#
+    # monster1
+    # village
+    # outpost
+    # abandoned (house, mine, factory, town)
+
+
+#
+# add animals
+#
+
+
+#
+# add caravan
+#
+
+
+#
+# add seasons
+#
+
+
+#
+# add buildings
+#
+
+
+#
+# tutorial
+#
+
+
+#
+# add a book with locations of mysterious place
+#
+
+#
+# level system!!!
+#
+
+
+# the list that the draw_map funcion is based off of
+CELLS = []
+
+
+# clear the screen when the funcion is run
+def clear_screen():
+    os.system('cls' if os.name == 'int' else 'clear')
+
+
+# sets locations of all the tile-types
+def get_locations():
+    return random.sample(CELLS, 11)
+
+
+# for creating the map
+def set_grid(SIZE):
+    x = 0
+    y = 0
+    # adding to SIZE below here will elongate the map
+    while y <= SIZE:
+        cell = x,y
+        CELLS.append(cell)
+        if x == SIZE:
+            x = 0
+            y += 1
+            continue
+        x += 1
+def draw_map(potato_farm, shop1, chest1, chest2, chest3, berries1, berries2, berries3, player, SIZE):
+    # list_of_letters = [" A", " B", " C", " D", " E", " F", " G", " H", " I", " J", " K", " L", " M", " N", " O", " P", " Q", " R", " S", " T", " U", " V" ," W", " X", " Y", " Z"]
+    # print(Fore.YELLOW+" A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"+Style.RESET_ALL)
+    print((Fore.YELLOW+" _"+Style.RESET_ALL)*(SIZE+1))
+    tile = Fore.YELLOW+"|"+Style.RESET_ALL+"{}"
+    for cell in CELLS:
+        x, y = cell
+        if x < SIZE:
+            line_end = ""
+            if cell == player:
+                output = tile.format(Fore.GREEN+"X"+Style.RESET_ALL)
+            elif (cell == berries1) or (cell == berries2) or (cell == berries3):
+                output = tile.format(Fore.BLUE+"+"+Style.RESET_ALL)
+            elif (cell == chest1) or (cell == chest2) or (cell == chest3):
+                output = tile.format(Fore.CYAN+"M"+Style.RESET_ALL)
+            elif (cell == shop1):
+                output = tile.format(Fore.LIGHTYELLOW_EX+"G"+Style.RESET_ALL)
+            elif (cell == potato_farm):
+                output = tile.format(Fore.LIGHTMAGENTA_EX+"?"+Style.RESET_ALL)
+            else:
+                output = tile.format(Fore.YELLOW+"_"+Style.RESET_ALL)
+        else:
+            line_end = "\n"
+            if cell == player:
+                output = tile.format(Fore.GREEN+"X"+Fore.YELLOW+"|"+Style.RESET_ALL)
+            elif (cell == berries1) or (cell == berries2) or (cell == berries3):
+                output = tile.format(Fore.BLUE+"+"+Fore.YELLOW+"|"+Style.RESET_ALL)
+            elif (cell == chest1) or (cell == chest2) or (cell == chest3):
+                output = tile.format(Fore.CYAN+"M"+Fore.YELLOW+"|"+Style.RESET_ALL)
+            elif (cell == shop1):
+                output = tile.format(Fore.LIGHTYELLOW_EX+"G"+Fore.YELLOW+"|"+Style.RESET_ALL)
+            elif (cell == potato_farm):
+                output = tile.format(Fore.LIGHTMAGENTA_EX+"?"+Fore.YELLOW+"|"+Style.RESET_ALL)
+            else:
+                output = tile.format(Fore.YELLOW+"_|"+Style.RESET_ALL)
+        print(output, end=line_end)
+    print("-"*2*SIZE+"---")
+
+
+# for moving the player
+def move_player(player, move):
+    x, y = player
+    if move == "W":
+        x -= 1
+    if move == "E":
+        x += 1
+    if move == "N":
+        y -= 1
+    if move == "NE":
+        y -= 1
+        x += 1
+    if move == "NW":
+        y -= 1
+        x -= 1
+    if move == "S":
+        y += 1
+    if move == "SE":
+        y += 1
+        x += 1
+    if move == "SW":
+        y += 1
+        x -= 1
+    if move == "WAIT":
+        pass
+    player = x, y
+    return player
+def get_moves(player, SIZE):
+    moves = ["W","E","N","NE","NW","S","SE","SW","WAIT"]
+    x, y = player
+    if x == 0 and y == 0:
+        moves.remove("N")
+        moves.remove("W")
+        moves.remove("NW")
+        moves.remove("NE")
+        moves.remove("SW")
+    elif x == 0 and y == SIZE:
+        moves.remove("S")
+        moves.remove("W")
+        moves.remove("SW")
+        moves.remove("SE")
+        moves.remove("NW")
+    elif x == SIZE and y == 0:
+        moves.remove("N")
+        moves.remove("E")
+        moves.remove("NW")
+        moves.remove("NE")
+        moves.remove("SE")
+    elif x == SIZE and y == SIZE:
+        moves.remove("S")
+        moves.remove("E")
+        moves.remove("SW")
+        moves.remove("SE")
+        moves.remove("NE")
+    else:
+        if x == 0:
+            moves.remove("W")
+            moves.remove("NW")
+            moves.remove("SW")
+        elif x == SIZE:
+            moves.remove("E")
+            moves.remove("NE")
+            moves.remove("SE")
+        elif y == 0:
+            moves.remove("N")
+            moves.remove("NE")
+            moves.remove("NW")
+        elif y == SIZE:
+            moves.remove("S")
+            moves.remove("SE")
+            moves.remove("SW")
+    return moves
+
+
+# print the title, death, inventory, and UI
+# def print_title():
+    # print("""
+    #     _ _ _       _                            222222222222222   
+    #    | | | | ___ | | ___  ___  _____  ___     2:::::::::::::::22 
+    #    | | | || -_|| ||  _|| . ||     || -_|    2::::::222222:::::2
+    #    |_____||___||_||___||___||_|_|_||___|    2222222     2:::::2
+    #                                                         2:::::2
+    #                                                         2:::::2          _    _        
+    #                                                      2222::::2          | |_ | |_  ___ 
+    #                                                 22222::::::22           |  _||   || -_|
+    #                                               22::::::::222             |_|  |_|_||___|
+    #                                              2:::::22222                               
+    #                                             2:::::2
+    #                                             2:::::2             
+    #                                             2:::::2       222222
+    #                                             2::::::2222222:::::2
+    #                                             2::::::::::::::::::2
+    #                                             22222222222222222222
+    #             dddddddd
+    #             d::::::d
+    #             d::::::d
+    #             d::::::d 
+    #             d:::::d                                                                                                              
+    #     ddddddddd:::::d uuuuuu    uuuuuunnnn  nnnnnnnn       ggggggggg   ggggg    eeeeeeeeeeee       ooooooooooo   nnnn  nnnnnnnn     
+    #   dd::::::::::::::d u::::u    u::::un:::nn::::::::nn    g:::::::::ggg::::g  ee::::::::::::ee   oo:::::::::::oo n:::nn::::::::nn  
+    #  d::::::::::::::::d u::::u    u::::un::::::::::::::nn  g:::::::::::::::::g e::::::eeeee:::::eeo:::::::::::::::on::::::::::::::nn 
+    # d:::::::ddddd:::::d u::::u    u::::unn:::::::::::::::ng::::::ggggg::::::gge::::::e     e:::::eo:::::ooooo:::::onn:::::::::::::::n
+    # d::::::d    d:::::d u::::u    u::::u  n:::::nnnn:::::ng:::::g     g:::::g e:::::::eeeee::::::eo::::o     o::::o  n:::::nnnn:::::n
+    # d:::::d     d:::::d u::::u    u::::u  n::::n    n::::ng:::::g     g:::::g e:::::::::::::::::e o::::o     o::::o  n::::n    n::::n
+    # d:::::d     d:::::d u::::u    u::::u  n::::n    n::::ng:::::g     g:::::g e::::::eeeeeeeeeee  o::::o     o::::o  n::::n    n::::n
+    # d:::::d     d:::::d u:::::uuuu:::::u  n::::n    n::::ng::::::g    g:::::g e:::::::e           o::::o     o::::o  n::::n    n::::n
+    # d::::::ddddd::::::ddu:::::::::::::::uun::::n    n::::ng:::::::ggggg:::::g e::::::::e          o:::::ooooo:::::o  n::::n    n::::n
+    #  d:::::::::::::::::d u:::::::::::::::un::::n    n::::n g::::::::::::::::g  e::::::::eeeeeeee  o:::::::::::::::o  n::::n    n::::n
+    #   d:::::::::ddd::::d  uu::::::::uu:::un::::n    n::::n  gg::::::::::::::g   ee:::::::::::::e   oo:::::::::::oo   n::::n    n::::n
+    #    ddddddddd   ddddd    uuuuuuuu  uuuunnnnnn    nnnnnn    gggggggg::::::g     eeeeeeeeeeeeee     ooooooooooo     nnnnnn    nnnnnn
+    #                                                                   g:::::g                                                        
+    #                                                       gggggg      g:::::g                                                        
+    #                                                       g:::::gg   gg:::::g                                                        
+    #                                                        g::::::ggg:::::::g                                                        
+    #                                                         gg:::::::::::::g                                                         
+    #                                                           ggg::::::ggg                                                           
+    #                                                              gggggg                                                              
+    #                                                                                                 """
+    # )
+    # input("Press return to start:")
+def print_title():
+    print("""
+     _ _ _       _                                          _    _        
+    | | | | ___ | | ___  ___  _____  ___      ____         | |_ | |_  ___ 
+    | | | || -_|| ||  _|| . ||     || -_|    |__  \        |  _||   || -_|
+    |_____||___||_||___||___||_|_|_||___|    __/  /        |_|  |_|_||___|
+                                            /  __/                  
+                                           /_____/                                                                                  
+                dddddddd                                                                                                             
+                d::::::d                                                                                                             
+                d::::::d                                                                                                             
+                d::::::d                                                                                                             
+                d:::::d                                                                                                              
+        ddddddddd:::::d uuuuuu    uuuuuunnnn  nnnnnnnn       ggggggggg   ggggg    eeeeeeeeeeee       ooooooooooo   nnnn  nnnnnnnn    
+      dd::::::::::::::d u::::u    u::::un:::nn::::::::nn    g:::::::::ggg::::g  ee::::::::::::ee   oo:::::::::::oo n:::nn::::::::nn  
+     d::::::::::::::::d u::::u    u::::un::::::::::::::nn  g:::::::::::::::::g e::::::eeeee:::::eeo:::::::::::::::on::::::::::::::nn 
+    d:::::::ddddd:::::d u::::u    u::::unn:::::::::::::::ng::::::ggggg::::::gge::::::e     e:::::eo:::::ooooo:::::onn:::::::::::::::n
+    d::::::d    d:::::d u::::u    u::::u  n:::::nnnn:::::ng:::::g     g:::::g e:::::::eeeee::::::eo::::o     o::::o  n:::::nnnn:::::n
+    d:::::d     d:::::d u::::u    u::::u  n::::n    n::::ng:::::g     g:::::g e:::::::::::::::::e o::::o     o::::o  n::::n    n::::n
+    d:::::d     d:::::d u::::u    u::::u  n::::n    n::::ng:::::g     g:::::g e::::::eeeeeeeeeee  o::::o     o::::o  n::::n    n::::n
+    d:::::d     d:::::d u:::::uuuu:::::u  n::::n    n::::ng::::::g    g:::::g e:::::::e           o::::o     o::::o  n::::n    n::::n
+    d::::::ddddd::::::ddu:::::::::::::::uun::::n    n::::ng:::::::ggggg:::::g e::::::::e          o:::::ooooo:::::o  n::::n    n::::n
+     d:::::::::::::::::d u:::::::::::::::un::::n    n::::n g::::::::::::::::g  e::::::::eeeeeeee  o:::::::::::::::o  n::::n    n::::n
+      d:::::::::ddd::::d  uu::::::::uu:::un::::n    n::::n  gg::::::::::::::g   ee:::::::::::::e   oo:::::::::::oo   n::::n    n::::n
+       ddddddddd   ddddd    uuuuuuuu  uuuunnnnnn    nnnnnn    gggggggg::::::g     eeeeeeeeeeeeee     ooooooooooo     nnnnnn    nnnnnn
+                                                                      g:::::g                                                        
+                                                          gggggg      g:::::g                                                        
+                                                          g:::::gg   gg:::::g                                                        
+                                                           g::::::ggg:::::::g                                                        
+                                                            gg:::::::::::::g                                                         
+                                                              ggg::::::ggg                                                           
+                                                                 gggggg                                                              
+    """)
+    input("Press return to start:")
+def print_death(turn, health, hunger, gold):
+    print("""
+                                                                
+                                                                
+    RRRRRRRRRRRRRRRRR        IIIIIIIIII     PPPPPPPPPPPPPPPPP   
+    R::::::::::::::::R       I::::::::I     P::::::::::::::::P  
+    R::::::RRRRRR:::::R      I::::::::I     P::::::PPPPPP:::::P 
+    RR:::::R     R:::::R     II::::::II     PP:::::P     P:::::P
+      R::::R     R:::::R       I::::I         P::::P     P:::::P
+      R::::R     R:::::R       I::::I         P::::P     P:::::P
+      R::::RRRRRR:::::R        I::::I         P::::PPPPPP:::::P 
+      R:::::::::::::RR         I::::I         P:::::::::::::PP  
+      R::::RRRRRR:::::R        I::::I         P::::PPPPPPPPP    
+      R::::R     R:::::R       I::::I         P::::P            
+      R::::R     R:::::R       I::::I         P::::P            
+      R::::R     R:::::R       I::::I         P::::P            
+    RR:::::R     R:::::R     II::::::II     PP::::::PP          
+    R::::::R     R:::::R     I::::::::I     P::::::::P          
+    R::::::R     R:::::R     I::::::::I     P::::::::P          
+    RRRRRRRR     RRRRRRR     IIIIIIIIII     PPPPPPPPPP          
+                                                            
+                You have died. Game over.
+        """)
+    print("Turn: {} | Health: {} | Hunger: {} | Gold: {} ".format(turn, health, hunger, gold))
+def print_UI(turn, health, hunger, gold):
+    if hunger <= 10:
+        hunger = Fore.RED + str(hunger) + Style.RESET_ALL
+    if health <= 10:
+        hunger = Fore.RED + str(health) + Style.RESET_ALL
+    print("Turn: {} | Health: {} | Hunger: {} | Gold: {} ".format(turn, health, hunger, gold))
+    hunger = Style.RESET_ALL + str(hunger)
+    health = Style.RESET_ALL + str(health)
+    print("-"*2*SIZE+"---")
+def print_inventory(inventory):
+    print("Your inventory:")
+    if len(inventory) == 0:
+        print(Fore.RED+"Empty"+Style.RESET_ALL)
+    for item in inventory:
+        if item.get("type") == "weapon":
+            print("Item:", item.get("name"), "  Durability:", item.get("durability"), "  Damage:", item.get("effect"))
+        elif item.get("type") == "food":
+            print("Item:", item.get("name"), "  Durability:", item.get("durability"), "  Feeding Power:", item.get("effect"))
+        elif item.get("name") == "Brown fluffy jacket":
+            print("Item:", item.get("name"), Fore.GREEN+" SPECIAL: Heals 2 per turn."+Style.RESET_ALL)
+        elif item.get("name") == "Volleyball":
+            print("Item:", item.get("name"), Fore.GREEN+" SPECIAL: Just a volleyball."+Style.RESET_ALL)
+    print("-"*2*SIZE+"---")
+def print_shop_keeper(SIZE):
+    print("""
+                (.,------...__
+             _.'"             `.
+           .'  .'   `, `. `.    `
+          . .'   .'/''--...__`.  \\    --  Hello! My name is Seb.
+         . .--.`.  ' "-.     '.  |           What can I do for you today?
+         ''  .'  _.' .())  .--":/
+         ''(  \_\      '   (()(
+         ''._'          (   \ '
+         ' `.            `--'  '
+          `.:    .   `-.___.'  '
+           `.     .    _  _  .'
+             )       .____.-'
+           .'`.        (--..
+         .' \  /\      / /  `.
+       .'    \(  \    /|/     `.
+     .'           \__/          `.
+    /      |        o      |      \\
+           |               |      |
+    """)
+    print("-"*2*SIZE+"---")
+def print_potato_farmer(SIZE):
+    print("""
+                     $$$$$$$$
+                    $$$$$$$$$$
+                   $$$$$$$$$$$$
+                   $$ 0    0 $$   --  Hello! My name is Kris.
+                   $$   ()   $$         What can I do for you today?
+                  $$$ \    / $$$
+                  $$$  \__/  $$$
+                     \______/
+                  _____!  !_____
+                  !            !
+                  !  !      !  !
+                  !  !      !  !
+                  !  !      !  !
+               ====================
+    """)
+    print("-"*2*SIZE+"---")
+
+# prints a message, like a recent action
+def return_message(message, SIZE):
+    print(message)
+    print("-"*2*SIZE+"---")
+
+
+# the game loop, very important!!
+def game_loop():
+
+    # define basic player stats
+    turn = 0
+    health = 100
+    max_health = 100
+    hunger = 100
+    max_hunger = 100
+    gold = 10
+    fashion = 0
+
+    # lists of items
+    misc = [{
+        "name":"Knife",
+        "durability":1,
+        "effect":10,
+        "value":15,
+        "type":"weapon"
+        },{
+        "name":"Gold",
+        "value":random.randint(10,50)
+        }]
+    foods = [{
+        "name":"Potato",
+        "durability":1,
+        "effect":7,
+        "value":10,
+        "type":"food"
+        },{
+        "name":"Melon",
+        "durability":3,
+        "effect":4,
+        "value":15,
+        "type":"food"
+        },{
+        "name":"Pineapple",
+        "durability":2,
+        "effect":4,
+        "value":12,
+        "type":"food"
+        },{
+        "name":"Papaya",
+        "durability":1,
+        "effect":4,
+        "value":6,
+        "type":"food"
+        }]
+    tools = [{
+        "name":"Sword",
+        "durability":3,
+        "effect":10,
+        "value":50,
+        "type":"weapon"
+        },{
+        "name":"Sheid",
+        "durability":3,
+        "effect":2,
+        "value":40,
+        "type":"weapon"
+        },{
+        "name":"Axe",
+        "durability":5,
+        "effect":20,
+        "value":100,
+        "type":"weapon"
+        },{
+        "name":"Staff",
+        "durability":7,
+        "effect":7,
+        "value":50,
+        "type":"weapon"
+        }]
+    # inventory starts with food and a random weapon, the max items in the inventory is 7
+    inventory = [{
+        "name":"Energy bar",
+        "durability":1,
+        "effect":15,
+        "value":20,
+        "type":"food"
+        }]
+    inventory.append(random.choice(tools))
+    # shop items
+    items_in_shop1 = []
+    items_in_shop1.extend(random.sample(tools, 3))
+    # items in the potato shop
+    potato_shop1 = [{
+        "name":"Potato",
+        "durability":1,
+        "effect":7,
+        "value":10,
+        "type":"food"
+        },{
+        "name":"Mashed potato",
+        "durability":1,
+        "effect":8,
+        "value":13,
+        "type":"food"
+        },{
+        "name":"Sweet potato",
+        "durability":1,
+        "effect":6,
+        "value":20,
+        "type":"food"
+        },{
+        "name":"Baked potato",
+        "durability":1,
+        "effect":9,
+        "value":15,
+        "type":"food"
+        }]
+    # fill chests
+    items_in_chest1 = random.sample(foods, 2)
+    items_in_chest2 = random.sample(tools, 1)
+    items_in_chest3 = random.sample(misc, 2)
+    
+    # generate random mysterious events for the mysterious tiles
+    # "abandond house", "mysterious box", "bear trap", 
+    generate_mysterious_event = ["gold", "dead body"]
+    mysterious1_event, mysterious2_event = random.sample(generate_mysterious_event, 2)
+
+    # booleans
+    playing = True
+    show_inventory = False
+
+    # defines initial messages, but they can change later
+    message = Fore.BLACK + "You have done nothing yet. Try moving somewhere." + Style.RESET_ALL
+    default_message = Fore.BLACK + ("-"*2*SIZE+"---") + Style.RESET_ALL
+
+    # spawn the things
+    potato_farm, mysterious1, mysterious2, shop1, chest1, chest2, chest3, berries1, berries2, berries3, player = get_locations()
+
+    while playing:
+        clear_screen()
+        draw_map(
+            potato_farm,
+            shop1,
+            chest1, chest2, chest3,
+            berries1, berries2, berries3,
+            player,
+            SIZE)
+        valid_moves = get_moves(player, SIZE)
+        print_UI(turn, health, hunger, gold)
+        if show_inventory == False:
+            pass
+        else:
+            print_inventory(inventory)
+
+        # if ["Brown fluffy jacket", None, None, 125,"clothing"] in inventory and health != max_health:
+        #     health += 2
+        print("'99' to quit")
+        print("'??' for help")
+        print("-"*2*SIZE+"---")
+        return_message(message, SIZE)
+        message = default_message
+        move = input("> ")
+        move = move.upper()
+
+        if move == "99":
+            break
+        elif move == "??":
+            clear_screen()
+            print("In this game you control a character that moves around a small map. Your goal is to avoid the monsters while exploring and having fun!")
+            print("Key:")
+            print("X = player")
+            print("+ = berry")
+            print("M = chest")
+            print("G = shop")
+            # print("T = monster")
+            print("-"*2*SIZE+"---")
+            print("Controls:")
+            print("- 'N' or 'n' to travel north")
+            print("- 'E' or 'e' to travel east")
+            print("- 'S' or 's' to travel south")
+            print("- 'W' or 'w' to travel west")
+            print("Hint: you can also move diagonally, ie 'ne' or 'sw'.")
+            print("Extra hint: you can also 'wait'")
+            print("- '99' to quit")
+            print("- '??' to get help")
+            print("- 'II' or 'ii' to toggle inventory")
+            print("- 'Eat' or 'eat' to eat something")
+            input("\nPress return to continue:")
+        elif move == "II":
+            if show_inventory == True:
+                show_inventory = False
+            elif show_inventory == False:
+                show_inventory = True
+            continue
+        elif move == "EAT":
+            while True:
+                clear_screen()
+                draw_map(
+                    potato_farm,
+                    shop1,
+                    chest1, chest2, chest3,
+                    berries1, berries2, berries3,
+                    player,
+                    SIZE)
+
+                print_UI(turn, health, hunger, gold)
+                print_inventory(inventory)
+                return_message(message, SIZE)
+
+                print("What would you like to eat? ('exit' to exit)")
+                eat = input("> ").capitalize()
+                if eat.lower() == "exit":
+                    break
+                for item in inventory:
+                    if eat == item.get("name") and item.get("type") == "food":
+                        add_hunger = item.get("effect")
+                        hunger += add_hunger
+                        if hunger > max_hunger:
+                            hunger = max_hunger
+                        inventory.remove(item)
+                        durability = item.pop("durability")
+                        durability -= 1
+                        item.update({"durability":durability})
+                        if durability == 0:
+                            message = (Fore.BLUE+"You finished the {}. +{} hunger.".format(item.get("name"), item.get("effect"))+Style.RESET_ALL)
+                        else:
+                            message = (Fore.BLUE+"You ate a piece of the {}. +{} hunger.".format(item.get("name"), item.get("effect"))+Style.RESET_ALL)
+                            inventory.append(item)
+                            break
+                    else:
+                        message = (Fore.RED+"You can not eat {}".format(eat)+Style.RESET_ALL)
+        elif move in valid_moves:
+            # update where the player is
+            player = move_player(player, move)
+
+
+            # auto move player for testing hehe
+            # player = potato_farm
+
+
+        #
+        # hunger management area
+        #
+            # natural deterioration of hunger
+            hunger -= 1
+            # lose health when starving
+            if hunger <= 0:
+                hunger = 0
+                health -= 10
+                message = Fore.RED + ("You are starving! {} turns left to eat something.".format(health/10)) + Style.RESET_ALL
+            # if the player is on a berry tile, they eat it
+            if (player == berries1) or (player == berries2) or (player == berries3):
+                hunger += 10
+                if hunger > max_hunger:
+                    hunger = max_hunger
+                if player == berries1:
+                    berries1 = None
+                if player == berries2:
+                    berries2 = None
+                if player == berries3:
+                    berries3 = None
+                message = Fore.BLUE + "You ate some berries, +15 hunger." + Style.RESET_ALL
+
+
+        #
+        # chest and inventory management area
+        #
+            if (player == chest1):
+                message = Fore.GREEN+"You opened chest 1"+Style.RESET_ALL
+                while True:
+                    clear_screen()
+                    draw_map(
+                        potato_farm,
+                        shop1,
+                        chest1, chest2, chest3,
+                        berries1, berries2, berries3,
+                        player,
+                        SIZE)
+                    print_UI(turn, health, hunger, gold)
+                    return_message(message, SIZE)
+
+                    # show items in the chest
+                    print("Chest:")
+                    if len(items_in_chest1) == 0:
+                        print(Fore.RED+"Empty"+Style.RESET_ALL)
+                    for item in items_in_chest1:
+                        print("- "+item.get("name"))
+
+                    print("Which items would you like to take from this chest?\n('exit' to exit or 'i' to list inventory)")
+                    get_item = input("> ")
+                    if get_item.lower() == "exit":
+                        message = default_message
+                        # make chests disappear after exiting
+                        if len(items_in_chest1) == 0:
+                            chest1 = None
+                        break
+
+                    # print current inventory
+                    elif get_item.lower() == "i":
+                        print_inventory(inventory)
+                        input("\nPress return to continue:")
+                        message = default_message
+                        continue
+                    
+                    # gets the item the user selected from the chest, or prints an error message
+                    for item in items_in_chest1:
+                        if get_item.capitalize() == item.get("name"):
+                            if len(inventory) < 8:
+                                if item.get("name") != "Gold":
+                                    inventory.append(item)
+                                    message = Fore.MAGENTA+"Added 1 {} to 'inventory'".format(item.get("name"))+Style.RESET_ALL
+                                else:
+                                    gold += item.get("value")
+                                    message = Fore.MAGENTA+"Added {} Gold to 'Gold'".format(item.get("value"))+Style.RESET_ALL
+                                items_in_chest1.remove(item)
+                            else:
+                                message = Fore.RED+"Your inventory is full. Use an item to make room."+Style.RESET_ALL
+                        else:
+                            message = Fore.RED+"'{}' is not an item in this chest".format(get_item)+Style.RESET_ALL
+            if (player == chest2):
+                message = Fore.GREEN+"You opened chest 2"+Style.RESET_ALL
+                while True:
+                    clear_screen()
+                    draw_map(
+                        potato_farm,
+                        shop1,
+                        chest1, chest2, chest3,
+                        berries1, berries2, berries3,
+                        player,
+                        SIZE)
+                    print_UI(turn, health, hunger, gold)
+                    return_message(message, SIZE)
+
+                    # show items in the chest
+                    print("Chest:")
+                    if len(items_in_chest2) == 0:
+                        print(Fore.RED+"Empty"+Style.RESET_ALL)
+                    for item in items_in_chest2:
+                        print("- "+item.get("name"))
+
+                    print("Which items would you like to take from this chest?\n('exit' to exit or 'i' to list inventory)")
+                    get_item = input("> ")
+                    if get_item.lower() == "exit":
+                        message = default_message
+                        # make chests disappear after exiting
+                        if len(items_in_chest2) == 0:
+                            chest1 = None
+                        break
+
+                    # print current inventory
+                    elif get_item.lower() == "i":
+                        print_inventory(inventory)
+                        input("\nPress return to continue:")
+                        message = default_message
+                        continue
+                    
+                    # gets the item the user selected from the chest, or prints an error message
+                    for item in items_in_chest2:
+                        if get_item.capitalize() == item.get("name"):
+                            if len(inventory) < 8:
+                                if item.get("name") != "Gold":
+                                    inventory.append(item)
+                                    message = Fore.MAGENTA+"Added 1 {} to 'inventory'".format(item.get("name"))+Style.RESET_ALL
+                                else:
+                                    gold += item.get("value")
+                                    message = Fore.MAGENTA+"Added {} Gold to 'Gold'".format(item.get("value"))+Style.RESET_ALL
+                                items_in_chest2.remove(item)
+                            else:
+                                message = Fore.RED+"Your inventory is full. Use an item to make room."+Style.RESET_ALL
+                        else:
+                            message = Fore.RED+"'{}' is not an item in this chest".format(get_item)+Style.RESET_ALL 
+            if (player == chest3):
+                message = Fore.GREEN+"You opened chest 3"+Style.RESET_ALL
+                while True:
+                    clear_screen()
+                    draw_map(
+                        potato_farm,
+                        shop1,
+                        chest1, chest2, chest3,
+                        berries1, berries2, berries3,
+                        player,
+                        SIZE)
+                    print_UI(turn, health, hunger, gold)
+                    return_message(message, SIZE)
+
+                    # show items in the chest
+                    print("Chest:")
+                    if len(items_in_chest3) == 0:
+                        print(Fore.RED+"Empty"+Style.RESET_ALL)
+                    for item in items_in_chest3:
+                        print("- "+item.get("name"))
+
+                    print("Which items would you like to take from this chest?\n('exit' to exit or 'i' to list inventory)")
+                    get_item = input("> ")
+                    if get_item.lower() == "exit":
+                        message = default_message
+                        # make chests disappear after exiting
+                        if len(items_in_chest3) == 0:
+                            chest1 = None
+                        break
+
+                    # print current inventory
+                    elif get_item.lower() == "i":
+                        print_inventory(inventory)
+                        input("\nPress return to continue:")
+                        message = default_message
+                        continue
+                    
+                    # gets the item the user selected from the chest, or prints an error message
+                    for item in items_in_chest3:
+                        if get_item.capitalize() == item.get("name"):
+                            if len(inventory) < 8:
+                                if item.get("name") != "Gold":
+                                    inventory.append(item)
+                                    message = Fore.MAGENTA+"Added 1 {} to 'inventory'".format(item.get("name"))+Style.RESET_ALL
+                                else:
+                                    gold += item.get("value")
+                                    message = Fore.MAGENTA+"Added {} Gold to 'Gold'".format(item.get("value"))+Style.RESET_ALL
+                                items_in_chest3.remove(item)
+                            else:
+                                message = Fore.RED+"Your inventory is full. Use an item to make room."+Style.RESET_ALL
+                        else:
+                            message = Fore.RED+"'{}' is not an item in this chest".format(get_item)+Style.RESET_ALL
+
+
+        #
+        # shop area
+        #
+            if (player == shop1):
+                message = Fore.GREEN+"You entered the shop!"+Style.RESET_ALL
+                while True:
+                    clear_screen()
+                    print_shop_keeper(SIZE)
+                    print_UI(turn, health, hunger, gold)
+                    print_inventory(inventory)
+                    print("Shop items:")
+                    for item in items_in_shop1:
+                            print(item.get("name"), "for {}G.".format(item.get("value")))
+                    print("-"*2*SIZE+"---")
+                    return_message(message, SIZE)
+                    if len(inventory) == 0:
+                        almost_useless_variabale = " "
+                    else:
+                        almost_useless_variabale = " or 's' to sell "
+                    print("Welcome to the shop!")
+                    print("'b' to buy"+ almost_useless_variabale +"items.\n('exit' to exit)")
+                    buy_sell = input("> ")
+                    if buy_sell == "exit":
+                        break
+                    # buy items
+                    if buy_sell.lower() == "b":
+                        buy_item = input("What would you like to buy?\n> ").capitalize()
+                        for item in items_in_shop1:
+                            if buy_item == item.get("name"):
+                                if gold < item.get("value"):
+                                    message = Fore.RED + "You don't have enough money to afford {}".format(item.get("name")) + Style.RESET_ALL
+                                    break
+                                else:
+                                    print("Are you sure you want to buy 1 {} for {}G.".format(item.get("name"), item.get("value")))
+                                    confirm_purchase = input("(y/n)\n> ").lower()
+                                    if confirm_purchase == "y":
+                                        gold -= item.get("value")
+                                        inventory.append(item)
+                                        items_in_shop1.remove(item)
+                                        message = Fore.MAGENTA + "You bought 1 {} for {}G.".format(item.get("name"), item.get("value")) + Style.RESET_ALL
+                                        break
+                                    else:
+                                        message = Fore.RED + "Purchase cancelled." + Style.RESET_ALL
+                                        break
+                            message = Fore.RED + "Sorry, we don't have '{}' in stock.".format(buy_item) + Style.RESET_ALL
+
+                    # sell items
+                    elif len(inventory) != 0:
+                        if buy_sell.lower() == "s":
+                            for item in inventory:
+                                print("1", item.get("name"), "for {}G.".format(item.get("value")))
+                            sell_item = input("What would you like to sell?\n> ").capitalize()
+                            for item in inventory:
+                                if sell_item == item.get("name"):
+                                    print("Are you sure you want to sell a {} for {}?".format(item.get("name"), item.get("value")))
+                                    confirm_sale = input("(y/n)\n> ").lower()
+                                    if confirm_sale == "y":
+                                        gold += item.get("value")
+                                        inventory.remove(item)
+                                        items_in_shop1.append(item)
+                                        message = Fore.MAGENTA + "You sold 1 {} for {}G.".format(item.get("name"), item.get("value")) + Style.RESET_ALL
+                                        break
+                                    else:
+                                        message = Fore.MAGENTA + "Sale cancelled." + Style.RESET_ALL
+                                        break
+                                message = Fore.RED + "You don't have '{}' in your inventory".format(item.get("name")) + Style.RESET_ALL
+
+
+        #
+        # mysterious area
+        #
+            if (player == mysterious1):
+                event = mysterious1_event
+                if event == "gold":
+                    sack_size = random.choice(["tiny", "small", "heavy", "large"])
+                    if sack_size == "tiny":
+                        gold_in_sack = random.randint(1,9)
+                    if sack_size == "small":
+                        gold_in_sack = random.randint(10,19)
+                    if sack_size == "heavy":
+                        gold_in_sack = random.randint(20,29)
+                    if sack_size == "large":
+                        gold_in_sack = random.randint(30,40)
+                    print("You stumble apon a {} sack of gold coins.".format(sack_size))
+                    take_coins = input("Take the coins? (y/n)\n> ").lower()
+                    if take_coins == "y":
+                        message = Fore.MAGENTA+"You got {} gold.".format(gold_in_sack)+Style.RESET_ALL
+                        gold += gold_in_sack
+                    else:
+                        message = Fore.MAGENTA+"You decide to leave the coins for someone else."+Style.RESET_ALL
+                    mysterious1 = None
+
+                elif event == "dead body":
+                    dig_up_body = input("You are trotting along when you notice a leg sticking out of the ground. Would you like to try and dig the body up?\n(y/n)\n> ").lower()
+                    if dig_up_body == "y":
+                        name_tag = random.choice(["Grete", "Ben", "Kate", "Sophia"])
+                        if name_tag == "Grete":
+                            item_on_body = {
+                            "name":"Brown fluffy jacket",
+                            "durability":None,
+                            "effect":None,
+                            "value":125,
+                            "type":"clothing"
+                            }
+                            fashion += 3
+                        elif name_tag == "Ben":
+                            item_on_body = {
+                            "name":"Baseball bat",
+                            "durability":4,
+                            "effect":13,
+                            "value":60,
+                            "type":"weapon"
+                            }
+                        elif name_tag == "Kate":
+                            item_on_body = {
+                            "name":"Volleyball",
+                            "durability":None,
+                            "effect":None,
+                            "value":75,
+                            "type":"toy"
+                            }
+                        elif name_tag == "Sophia":
+                            item_on_body = {
+                            "name":"Shinguard",
+                            "durability":None,
+                            "effect":None,
+                            "value":100,
+                            "type":"clothing"
+                            }
+                            max_health += 10
+                        print("\nYou begin to dig up the leg. Slowly a body begins to emerge, face up.\nThere is a large flat stone on the corpses stomach, which has '{}' engraved in it.\nThis name seems to have belonged to the poor individual that lays here.".format(name_tag))
+                        search_body = input("Would you like to search the body?\n(y/n)\n> ").lower()
+                        if search_body == "y":
+                            take_item_from_body = input("\nThere is a {} that you think you can take. Do you take it?\n(y/n)\n> ".format(item_on_body[0])).lower()
+                            if take_item_from_body == "y":
+                                inventory.append(item_on_body)
+                                message = Fore.MAGENTA+"You got a {}".format(item_on_body.get("name"))+Style.RESET_ALL
+                        else:
+                            message = Fore.MAGENTA+"You leave the open grave and continue on your journey."+Style.RESET_ALL
+                    else:
+                        message = Fore.MAGENTA+"You leave the leg undisturbed and continue on your journey."+Style.RESET_ALL
+                    mysterious1 = None
+
+            elif (player == mysterious2):
+                event = mysterious2_event
+                if event == "gold":
+                    sack_size = random.choice(["tiny", "small", "heavy", "large"])
+                    if sack_size == "tiny":
+                        gold_in_sack = random.randint(1,9)
+                    if sack_size == "small":
+                        gold_in_sack = random.randint(10,19)
+                    if sack_size == "heavy":
+                        gold_in_sack = random.randint(20,29)
+                    if sack_size == "large":
+                        gold_in_sack = random.randint(30,40)
+                    print("You stumble apon a {} sack of gold coins.".format(sack_size))
+                    take_coins = input("Take the coins? (y/n)\n> ").lower()
+                    if take_coins == "y":
+                        message = Fore.MAGENTA+"You got {} gold.".format(gold_in_sack)+Style.RESET_ALL
+                        gold += gold_in_sack
+                    else:
+                        message = Fore.MAGENTA+"You decide to leave the coins for someone else."+Style.RESET_ALL
+                    mysterious2 = None
+
+                elif event == "dead body":
+                    dig_up_body = input("You are trotting along when you notice a leg sticking out of the ground. Would you like to try and dig the body up?\n(y/n)\n> ").lower()
+                    if dig_up_body == "y":
+                        name_tag = random.choice(["Grete", "Ben", "Kate", "Sophia"])
+                        if name_tag == "Grete":
+                            item_on_body = {
+                            "name":"Brown fluffy jacket",
+                            "durability":None,
+                            "effect":None,
+                            "value":125,
+                            "type":"clothing"
+                            }
+                            fashion += 3
+                        elif name_tag == "Ben":
+                            item_on_body = {
+                            "name":"Baseball bat",
+                            "durability":4,
+                            "effect":13,
+                            "value":60,
+                            "type":"weapon"
+                            }
+                        elif name_tag == "Kate":
+                            item_on_body = {
+                            "name":"Volleyball",
+                            "durability":None,
+                            "effect":None,
+                            "value":75,
+                            "type":"toy"
+                            }
+                        elif name_tag == "Sophia":
+                            item_on_body = {
+                            "name":"Shinguard",
+                            "durability":None,
+                            "effect":None,
+                            "value":100,
+                            "type":"clothing"
+                            }
+                            max_health += 10
+                        print("\nYou begin to dig up the leg. Slowly a body begins to emerge, face up.\nThere is a large flat stone on the corpses stomach, which has '{}' engraved in it.\nThis name seems to have belonged to the poor individual that lays here.".format(name_tag))
+                        search_body = input("Would you like to search the body?\n(y/n)\n> ").lower()
+                        if search_body == "y":
+                            take_item_from_body = input("\nThere is a {} that you think you can take. Do you take it?\n(y/n)\n> ".format(item_on_body[0])).lower()
+                            if take_item_from_body == "y":
+                                inventory.append(item_on_body)
+                                message = Fore.MAGENTA+"You got a {}".format(item_on_body.get("name"))+Style.RESET_ALL
+                        else:
+                            message = Fore.MAGENTA+"You leave the open grave and continue on your journey."+Style.RESET_ALL
+                    else:
+                        message = Fore.MAGENTA+"You leave the leg undisturbed and continue on your journey."+Style.RESET_ALL
+                    mysterious2 = None
+
+
+            # elif event == "abandond house":
+
+            # elif event == "mysterious box":
+
+            # elif event == "bear trap":
+
+
+        #
+        # potato farm
+        #
+            if (player == potato_farm):
+                message = Fore.GREEN+"You spot a small potato farm."+Style.RESET_ALL
+                clear_screen()
+                draw_map(
+                    potato_farm,
+                    shop1,
+                    chest1, chest2, chest3,
+                    berries1, berries2, berries3,
+                    player,
+                    SIZE)
+                print_UI(turn, health, hunger, gold)
+                print_inventory(inventory)
+                return_message(message, SIZE)
+                print("A lady waves you over to her, she is standing behind\na small counter that says 'POTATO SALE'")
+                go_to_lady = input("Do you walk up to her?\n(y/n)\n> ").lower()
+                if go_to_lady == "y":
+                    while True:
+                        clear_screen()
+                        print_potato_farmer(SIZE)
+                        print_UI(turn, health, hunger, gold)
+                        print_inventory(inventory)
+                        return_message(message, SIZE)
+                        print("Hello! I have some wares that I can sell you, take a look:")
+                        for item in potato_shop1:
+                            print(item.get("name"), "for {}G.".format(item.get("value")))
+                        print("-"*2*SIZE+"---")
+                        buy_item = input("What would you like to buy? ('exit' to exit)\n> ").capitalize()
+                        if buy_item == "Exit":
+                            break
+                        for item in potato_shop1:
+                            if buy_item == item.get("name"):
+                                if gold < item.get("value"):
+                                    message = Fore.RED + "You don't have enough money to afford {}".format(item.get("name")) + Style.RESET_ALL
+                                    break
+                                else:
+                                    print("Are you sure you want to buy 1 {} for {}G.".format(item.get("name"), item.get("value")))
+                                    confirm_purchase = input("(y/n)\n> ").lower()
+                                    if confirm_purchase == "y":
+                                        gold -= item.get("value")
+                                        inventory.append(item)
+                                        potato_shop1.remove(item)
+                                        message = Fore.MAGENTA + "You bought 1 {} for {}G.".format(item.get("name"), item.get("value")) + Style.RESET_ALL
+                                        break
+                                    else:
+                                        message = Fore.RED + "Purchase cancelled." + Style.RESET_ALL
+                                        break
+                            message = Fore.RED + "Sorry, we don't have '{}' in stock.".format(buy_item) + Style.RESET_ALL
+                else:
+                    print("You pretend not to see the lady and continue on your way.")
+
+
+        #
+        # death management area
+        #
+            # if the player has 0 health, they die
+            if health <= 0:
+                clear_screen()
+                print_death(turn, health, hunger, gold)
+                playing = False
+
+
+        # increase the turn number
+            turn += 1
+
+
+        # error message if the player makes a move that is not valid
+        else:
+            message = (Fore.RED+"That is not a valid move"+Style.RESET_ALL)
+
+
+
+
+    # if the game ends
+    else:
+        play_again = input("Play again? (y/n)\n> ").lower()
+        if play_again != "n":
+            game_loop()
+
+
+
+
+#  !!! now we actually call the functions to make the game run: !!!  #
+
+SIZE = 26
+SIZE -= 1
+set_grid(SIZE)
+clear_screen()
+print_title()
+game_loop()
