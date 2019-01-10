@@ -118,7 +118,7 @@ def draw_map(monster1, potato_farm, shop1, chest1, chest2, chest3, berries1, ber
 
 
 # for moving the player
-def move_player(player, move):
+def move_player(health, max_health, player, move):
     x, y = player
     if move == "W":
         x -= 1
@@ -141,9 +141,10 @@ def move_player(player, move):
         y += 1
         x -= 1
     if move == "WAIT":
-        pass
+        if health != max_health:
+            health += 1
     player = x, y
-    return player
+    return player, health
 def get_moves(player, SIZE):
     moves = ["W","E","N","NE","NW","S","SE","SW","WAIT"]
     x, y = player
@@ -358,6 +359,22 @@ def print_potato_farmer(SIZE):
                ====================
     """)
     print("-"*2*SIZE+"---")
+def print_monster(monster_health, SIZE):
+    print("""
+               .----.__
+              /---.__  \\
+             /        `\ |
+            | o     o    \|   ------- GRRRR
+          ./| .vvvvvvvv.  |\\           I'm gonna eat you
+         / /| |        |  | \\
+        //' | `^vvvvvvv'  |/\\\\
+        ~   \            /   \\\\
+            |   """, monster_health, """   |     ~
+            7          /
+           /    .     |
+          -|_/\/ `---.|_
+    """)
+    print("-"*2*SIZE+"---")
 
 # prints a message, like a recent action
 def return_message(message, SIZE):
@@ -376,6 +393,10 @@ def game_loop():
     max_hunger = 100
     gold = 10
     fashion = 0
+
+    # define basic monster stats
+    monster_max_health = 25
+
 
     # lists of items
     misc = [{
@@ -437,6 +458,18 @@ def game_loop():
         "effect":7,
         "value":50,
         "type":"weapon"
+        },{
+        "name":"Mace",
+        "durability":2,
+        "effect":14,
+        "value":65,
+        "type":"weapon"
+        },{
+        "name":"Club",
+        "durability":5,
+        "effect":6,
+        "value":30,
+        "type":"weapon"
         }]
     # inventory starts with food and a random weapon, the max items in the inventory is 7
     inventory = [{
@@ -477,13 +510,12 @@ def game_loop():
         "type":"food"
         }]
     # fill chests
-    items_in_chest1 = random.sample(foods, 2)
+    items_in_chest1 = random.sample(misc, 2)
     items_in_chest2 = random.sample(tools, 1)
-    items_in_chest3 = random.sample(misc, 2)
+    items_in_chest3 = random.sample(foods, 2)
     
     # generate random mysterious events for the mysterious tiles
-    # "abandond house", "mysterious box", "bear trap", 
-    generate_mysterious_event = ["gold", "dead body"]
+    generate_mysterious_event = ["gold", "dead body", "ambush"]
     mysterious1_event, mysterious2_event = random.sample(generate_mysterious_event, 2)
 
     # booleans
@@ -594,11 +626,11 @@ def game_loop():
                         message = (Fore.RED+"You can not eat {}".format(eat)+Style.RESET_ALL)
         elif move in valid_moves:
             # update where the player is
-            player = move_player(player, move)
+            player, health = move_player(health, max_health, player, move)
 
 
             # auto move player for testing hehe
-            # player = potato_farm
+            player = monster1
 
 
         #
@@ -665,22 +697,22 @@ def game_loop():
                         input("\nPress return to continue:")
                         message = default_message
                         continue
-                    
-                    # gets the item the user selected from the chest, or prints an error message
-                    for item in items_in_chest1:
-                        if get_item.capitalize() == item.get("name"):
-                            if len(inventory) < 8:
+
+                    if len(inventory) <= 7:
+                        # gets the item the user selected from the chest, or prints an error message
+                        for item in items_in_chest1:
+                            if get_item.capitalize() == item.get("name"):
                                 if item.get("name") != "Gold":
                                     inventory.append(item)
-                                    message = Fore.MAGENTA+"Added 1 {} to 'inventory'".format(item.get("name"))+Style.RESET_ALL
+                                    message = Fore.MAGENTA+"Added 1 '{}' to your inventory".format(item.get("name"))+Style.RESET_ALL
                                 else:
                                     gold += item.get("value")
-                                    message = Fore.MAGENTA+"Added {} Gold to 'Gold'".format(item.get("value"))+Style.RESET_ALL
+                                    message = Fore.MAGENTA+"Added '{}' Gold to your gold".format(item.get("value"))+Style.RESET_ALL
                                 items_in_chest1.remove(item)
                             else:
-                                message = Fore.RED+"Your inventory is full. Use an item to make room."+Style.RESET_ALL
-                        else:
-                            message = Fore.RED+"'{}' is not an item in this chest".format(get_item)+Style.RESET_ALL
+                                message = Fore.RED+"'{}' is not an item in this chest".format(get_item)+Style.RESET_ALL
+                    else:
+                        message = Fore.RED+"Your inventory is full. Use an item to make room."+Style.RESET_ALL
             if (player == chest2):
                 message = Fore.GREEN+"You opened chest 2"+Style.RESET_ALL
                 while True:
@@ -719,21 +751,21 @@ def game_loop():
                         message = default_message
                         continue
                     
-                    # gets the item the user selected from the chest, or prints an error message
-                    for item in items_in_chest2:
-                        if get_item.capitalize() == item.get("name"):
-                            if len(inventory) < 8:
+                    if len(inventory) <= 7:
+                        # gets the item the user selected from the chest, or prints an error message
+                        for item in items_in_chest2:
+                            if get_item.capitalize() == item.get("name"):
                                 if item.get("name") != "Gold":
                                     inventory.append(item)
                                     message = Fore.MAGENTA+"Added 1 {} to 'inventory'".format(item.get("name"))+Style.RESET_ALL
                                 else:
                                     gold += item.get("value")
-                                    message = Fore.MAGENTA+"Added {} Gold to 'Gold'".format(item.get("value"))+Style.RESET_ALL
+                                    message = Fore.MAGENTA+"Added '{}' Gold to your gold".format(item.get("value"))+Style.RESET_ALL
                                 items_in_chest2.remove(item)
                             else:
-                                message = Fore.RED+"Your inventory is full. Use an item to make room."+Style.RESET_ALL
-                        else:
-                            message = Fore.RED+"'{}' is not an item in this chest".format(get_item)+Style.RESET_ALL 
+                                message = Fore.RED+"'{}' is not an item in this chest".format(get_item)+Style.RESET_ALL
+                    else:
+                        message = Fore.RED+"Your inventory is full. Use an item to make room."+Style.RESET_ALL
             if (player == chest3):
                 message = Fore.GREEN+"You opened chest 3"+Style.RESET_ALL
                 while True:
@@ -772,21 +804,21 @@ def game_loop():
                         message = default_message
                         continue
                     
-                    # gets the item the user selected from the chest, or prints an error message
-                    for item in items_in_chest3:
-                        if get_item.capitalize() == item.get("name"):
-                            if len(inventory) < 8:
+                    if len(inventory) <= 7:
+                        # gets the item the user selected from the chest, or prints an error message
+                        for item in items_in_chest3:
+                            if get_item.capitalize() == item.get("name"):
                                 if item.get("name") != "Gold":
                                     inventory.append(item)
                                     message = Fore.MAGENTA+"Added 1 {} to 'inventory'".format(item.get("name"))+Style.RESET_ALL
                                 else:
                                     gold += item.get("value")
-                                    message = Fore.MAGENTA+"Added {} Gold to 'Gold'".format(item.get("value"))+Style.RESET_ALL
+                                    message = Fore.MAGENTA+"Added '{}' Gold to your gold".format(item.get("value"))+Style.RESET_ALL
                                 items_in_chest3.remove(item)
                             else:
-                                message = Fore.RED+"Your inventory is full. Use an item to make room."+Style.RESET_ALL
-                        else:
-                            message = Fore.RED+"'{}' is not an item in this chest".format(get_item)+Style.RESET_ALL
+                                message = Fore.RED+"'{}' is not an item in this chest".format(get_item)+Style.RESET_ALL
+                    else:
+                        message = Fore.RED+"Your inventory is full. Use an item to make room."+Style.RESET_ALL
 
 
         #
@@ -879,7 +911,6 @@ def game_loop():
                         gold += gold_in_sack
                     else:
                         message = Fore.MAGENTA+"You decide to leave the coins for someone else."+Style.RESET_ALL
-                    mysterious1 = None
 
                 elif event == "dead body":
                     dig_up_body = input("You are trotting along when you notice a leg sticking out of the ground. Would you like to try and dig the body up?\n(y/n)\n> ").lower()
@@ -930,7 +961,13 @@ def game_loop():
                             message = Fore.MAGENTA+"You leave the open grave and continue on your journey."+Style.RESET_ALL
                     else:
                         message = Fore.MAGENTA+"You leave the leg undisturbed and continue on your journey."+Style.RESET_ALL
-                    mysterious1 = None
+
+                elif event == "ambush":
+                    clear_screen()
+                    print("Under construction :(")
+                    input("> ")
+
+                mysterious1 = None
 
             elif (player == mysterious2):
                 event = mysterious2_event
@@ -951,7 +988,6 @@ def game_loop():
                         gold += gold_in_sack
                     else:
                         message = Fore.MAGENTA+"You decide to leave the coins for someone else."+Style.RESET_ALL
-                    mysterious2 = None
 
                 elif event == "dead body":
                     dig_up_body = input("You are trotting along when you notice a leg sticking out of the ground. Would you like to try and dig the body up?\n(y/n)\n> ").lower()
@@ -1002,14 +1038,19 @@ def game_loop():
                             message = Fore.MAGENTA+"You leave the open grave and continue on your journey."+Style.RESET_ALL
                     else:
                         message = Fore.MAGENTA+"You leave the leg undisturbed and continue on your journey."+Style.RESET_ALL
-                    mysterious2 = None
 
+                elif event == "ambush":
+                    clear_screen()
+                    print("Under construction :(")
+                    input("> ")
 
-            # elif event == "abandond house":
+                mysterious2 = None
 
-            # elif event == "mysterious box":
+                # elif event == "abandond house":
 
-            # elif event == "bear trap":
+                # elif event == "mysterious box":
+
+                # elif event == "bear trap":
 
 
         #
@@ -1081,8 +1122,34 @@ def game_loop():
         # monster managemet area
         #
             if (player == monster1):
-                clear_screen()
-                input("> ")
+                fighting = True
+                while fighting:
+                    clear_screen()
+                    monster_health = monster_max_health
+                    print_monster(monster_health, SIZE)
+                    return_message(message, SIZE)
+                    print_UI(turn, health, hunger, gold)
+                    print("You can: 1) Attack 2) Wait 3) Run")
+                    player_move = input("> ")
+
+                    if player_move.capitalize() == "Attack":
+                        print("You choose to attack!\nWhich weapon do you use?")
+                        for item in inventory:
+                            if item.get("type") == "weapon":
+                                print("Item:", item.get("name"), "  Durability:", item.get("durability"), "  Damage:", item.get("effect"))
+                        input("> ")
+
+                    elif player_move.capitalize() == "Wait":
+                        print("Under construction :(")
+                        input("> ")
+
+                    elif player_move.capitalize() == "Run":
+                        print("Under construction :(")
+                        input("> ")
+
+                    else:
+                        print("Under construction :(")
+                        input("> ")
 
         # increase the turn number
             turn += 1
