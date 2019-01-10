@@ -58,7 +58,7 @@ def clear_screen():
 
 # sets locations of all the tile-types
 def get_locations():
-    return random.sample(CELLS, 11)
+    return random.sample(CELLS, 12)
 
 
 # for creating the map
@@ -74,7 +74,7 @@ def set_grid(SIZE):
             y += 1
             continue
         x += 1
-def draw_map(potato_farm, shop1, chest1, chest2, chest3, berries1, berries2, berries3, player, SIZE):
+def draw_map(monster1, potato_farm, shop1, chest1, chest2, chest3, berries1, berries2, berries3, player, SIZE):
     # list_of_letters = [" A", " B", " C", " D", " E", " F", " G", " H", " I", " J", " K", " L", " M", " N", " O", " P", " Q", " R", " S", " T", " U", " V" ," W", " X", " Y", " Z"]
     # print(Fore.YELLOW+" A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"+Style.RESET_ALL)
     print((Fore.YELLOW+" _"+Style.RESET_ALL)*(SIZE+1))
@@ -93,6 +93,8 @@ def draw_map(potato_farm, shop1, chest1, chest2, chest3, berries1, berries2, ber
                 output = tile.format(Fore.LIGHTYELLOW_EX+"G"+Style.RESET_ALL)
             elif (cell == potato_farm):
                 output = tile.format(Fore.LIGHTMAGENTA_EX+"?"+Style.RESET_ALL)
+            elif (cell == monster1):
+                output = tile.format(Fore.RED+"§"+Style.RESET_ALL)
             else:
                 output = tile.format(Fore.YELLOW+"_"+Style.RESET_ALL)
         else:
@@ -107,6 +109,8 @@ def draw_map(potato_farm, shop1, chest1, chest2, chest3, berries1, berries2, ber
                 output = tile.format(Fore.LIGHTYELLOW_EX+"G"+Fore.YELLOW+"|"+Style.RESET_ALL)
             elif (cell == potato_farm):
                 output = tile.format(Fore.LIGHTMAGENTA_EX+"?"+Fore.YELLOW+"|"+Style.RESET_ALL)
+            elif (cell == monster1):
+                output = tile.format(Fore.RED+"§"+Fore.YELLOW+"|"+Style.RESET_ALL)
             else:
                 output = tile.format(Fore.YELLOW+"_|"+Style.RESET_ALL)
         print(output, end=line_end)
@@ -491,11 +495,12 @@ def game_loop():
     default_message = Fore.BLACK + ("-"*2*SIZE+"---") + Style.RESET_ALL
 
     # spawn the things
-    potato_farm, mysterious1, mysterious2, shop1, chest1, chest2, chest3, berries1, berries2, berries3, player = get_locations()
+    monster1, potato_farm, mysterious1, mysterious2, shop1, chest1, chest2, chest3, berries1, berries2, berries3, player = get_locations()
 
     while playing:
         clear_screen()
         draw_map(
+            monster1,
             potato_farm,
             shop1,
             chest1, chest2, chest3,
@@ -553,6 +558,7 @@ def game_loop():
             while True:
                 clear_screen()
                 draw_map(
+                    monster1,
                     potato_farm,
                     shop1,
                     chest1, chest2, chest3,
@@ -627,6 +633,7 @@ def game_loop():
                 while True:
                     clear_screen()
                     draw_map(
+                        monster1,
                         potato_farm,
                         shop1,
                         chest1, chest2, chest3,
@@ -679,6 +686,7 @@ def game_loop():
                 while True:
                     clear_screen()
                     draw_map(
+                        monster1,
                         potato_farm,
                         shop1,
                         chest1, chest2, chest3,
@@ -731,6 +739,7 @@ def game_loop():
                 while True:
                     clear_screen()
                     draw_map(
+                        monster1,
                         potato_farm,
                         shop1,
                         chest1, chest2, chest3,
@@ -1010,6 +1019,7 @@ def game_loop():
                 message = Fore.GREEN+"You spot a small potato farm."+Style.RESET_ALL
                 clear_screen()
                 draw_map(
+                    monster1,
                     potato_farm,
                     shop1,
                     chest1, chest2, chest3,
@@ -1066,6 +1076,13 @@ def game_loop():
                 print_death(turn, health, hunger, gold)
                 playing = False
 
+
+        #
+        # monster managemet area
+        #
+            if (player == monster1):
+                clear_screen()
+                input("> ")
 
         # increase the turn number
             turn += 1
