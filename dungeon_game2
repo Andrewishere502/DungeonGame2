@@ -190,7 +190,51 @@ def get_moves(player, SIZE):
             moves.remove("SE")
             moves.remove("SW")
     return moves
-
+def escape(player, SIZE):
+    escape_tile = ["W","E","N","NE","NW","S","SE","SW"]
+    x, y = player
+    if x == 0 and y == 0:
+        escape_tile.remove("N")
+        escape_tile.remove("W")
+        escape_tile.remove("NW")
+        escape_tile.remove("NE")
+        escape_tile.remove("SW")
+    elif x == 0 and y == SIZE:
+        escape_tile.remove("S")
+        escape_tile.remove("W")
+        escape_tile.remove("SW")
+        escape_tile.remove("SE")
+        escape_tile.remove("NW")
+    elif x == SIZE and y == 0:
+        escape_tile.remove("N")
+        escape_tile.remove("E")
+        escape_tile.remove("NW")
+        escape_tile.remove("NE")
+        escape_tile.remove("SE")
+    elif x == SIZE and y == SIZE:
+        escape_tile.remove("S")
+        escape_tile.remove("E")
+        escape_tile.remove("SW")
+        escape_tile.remove("SE")
+        escape_tile.remove("NE")
+    else:
+        if x == 0:
+            escape_tile.remove("W")
+            escape_tile.remove("NW")
+            escape_tile.remove("SW")
+        elif x == SIZE:
+            escape_tile.remove("E")
+            escape_tile.remove("NE")
+            escape_tile.remove("SE")
+        elif y == 0:
+            escape_tile.remove("N")
+            escape_tile.remove("NE")
+            escape_tile.remove("NW")
+        elif y == SIZE:
+            escape_tile.remove("S")
+            escape_tile.remove("SE")
+            escape_tile.remove("SW")
+        return random.choice(escape_tile)
 
 # print the title, death, inventory, and UI
 # def print_title():
@@ -857,7 +901,7 @@ def game_loop():
                     print_inventory(inventory)
                     print("Shop items:")
                     for item in items_in_shop1:
-                            print(item.get("name"), "for {}G.".format(item.get("value")))
+                            print("-", item.get("name"), "for {}G.".format(item.get("value")))
                     print("-"*2*SIZE+"---")
                     return_message(message, SIZE)
                     if len(inventory) == 0:
@@ -1167,7 +1211,9 @@ def game_loop():
 
                         if run_away_chance == 0:
                             message = Fore.GREEN + "You manage to run from the monster!" + Style.RESET_ALL
-                            escape_tile = random.choice()
+                            escape_move = escape(player, SIZE)
+                            player, health = move_player(health, max_health, player, escape_move)
+                            break
                         else:
                             health -= 10
                             message = Fore.RED + "You don't manage to escape the monster, -10 health" + Style.RESET_ALL
