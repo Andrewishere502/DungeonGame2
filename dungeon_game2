@@ -60,7 +60,7 @@ def clear_screen():
 
 # sets locations of all the tile-types
 def get_locations():
-    return random.sample(CELLS, 12)
+    return random.sample(CELLS, 14)
 
 
 # for creating the map
@@ -76,7 +76,7 @@ def set_grid(SIZE):
             y += 1
             continue
         x += 1
-def draw_map(monster1, potato_farm, shop1, chest1, chest2, chest3, berries1, berries2, berries3, player, SIZE):
+def draw_map(monster1, monster2, monster3, potato_farm, shop1, chest1, chest2, chest3, berries1, berries2, berries3, player, SIZE):
     # list_of_letters = [" A", " B", " C", " D", " E", " F", " G", " H", " I", " J", " K", " L", " M", " N", " O", " P", " Q", " R", " S", " T", " U", " V" ," W", " X", " Y", " Z"]
     # print(Fore.YELLOW+" A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"+Style.RESET_ALL)
     print((Fore.YELLOW+" _"+Style.RESET_ALL)*(SIZE+1))
@@ -95,7 +95,7 @@ def draw_map(monster1, potato_farm, shop1, chest1, chest2, chest3, berries1, ber
                 output = tile.format(Fore.LIGHTYELLOW_EX+"G"+Style.RESET_ALL)
             elif (cell == potato_farm):
                 output = tile.format(Fore.LIGHTMAGENTA_EX+"?"+Style.RESET_ALL)
-            elif (cell == monster1):
+            elif (cell == monster1) or (cell == monster2) or (cell == monster3):
                 output = tile.format(Fore.RED+"§"+Style.RESET_ALL)
             else:
                 output = tile.format(Fore.YELLOW+"_"+Style.RESET_ALL)
@@ -111,7 +111,7 @@ def draw_map(monster1, potato_farm, shop1, chest1, chest2, chest3, berries1, ber
                 output = tile.format(Fore.LIGHTYELLOW_EX+"G"+Fore.YELLOW+"|"+Style.RESET_ALL)
             elif (cell == potato_farm):
                 output = tile.format(Fore.LIGHTMAGENTA_EX+"?"+Fore.YELLOW+"|"+Style.RESET_ALL)
-            elif (cell == monster1):
+            elif (cell == monster1) or (cell == monster2) or (cell == monster3):
                 output = tile.format(Fore.RED+"§"+Fore.YELLOW+"|"+Style.RESET_ALL)
             else:
                 output = tile.format(Fore.YELLOW+"_|"+Style.RESET_ALL)
@@ -539,12 +539,12 @@ def game_loop():
     default_message = Fore.BLACK + ("-"*2*SIZE+"---") + Style.RESET_ALL
 
     # spawn the things
-    monster1, potato_farm, mysterious1, mysterious2, shop1, chest1, chest2, chest3, berries1, berries2, berries3, player = get_locations()
+    monster1, monster2, monster3, potato_farm, mysterious1, mysterious2, shop1, chest1, chest2, chest3, berries1, berries2, berries3, player = get_locations()
 
     while playing:
         clear_screen()
         draw_map(
-            monster1,
+            monster1, monster2, monster3,
             potato_farm,
             shop1,
             chest1, chest2, chest3,
@@ -606,7 +606,7 @@ def game_loop():
             while True:
                 clear_screen()
                 draw_map(
-                    monster1,
+                    monster1, monster2, monster3,
                     potato_farm,
                     shop1,
                     chest1, chest2, chest3,
@@ -684,7 +684,7 @@ def game_loop():
                 while True:
                     clear_screen()
                     draw_map(
-                        monster1,
+                        monster1, monster2, monster3,
                         potato_farm,
                         shop1,
                         chest1, chest2, chest3,
@@ -737,7 +737,7 @@ def game_loop():
                 while True:
                     clear_screen()
                     draw_map(
-                        monster1,
+                        monster1, monster2, monster3,
                         potato_farm,
                         shop1,
                         chest1, chest2, chest3,
@@ -790,7 +790,7 @@ def game_loop():
                 while True:
                     clear_screen()
                     draw_map(
-                        monster1,
+                        monster1, monster2, monster3,
                         potato_farm,
                         shop1,
                         chest1, chest2, chest3,
@@ -1077,7 +1077,7 @@ def game_loop():
                 message = Fore.GREEN+"You spot a small potato farm."+Style.RESET_ALL
                 clear_screen()
                 draw_map(
-                    monster1,
+                    monster1, monster2, monster3,
                     potato_farm,
                     shop1,
                     chest1, chest2, chest3,
@@ -1225,6 +1225,240 @@ def game_loop():
                             fighting = False
                         if monster_health <= 0:
                             monster1 = None
+
+                        # exit player turn
+                        break
+
+                    while True:
+                        clear_screen()
+                        print_monster(monster_health, SIZE)
+                        print_UI(turn, health, hunger, gold)
+                        return_message(message, SIZE)
+                        message = default_message
+                        time.sleep(1)
+
+                        # monsters turn
+                        monster_damage = random.randint(1,3)*2
+                        health -= monster_damage
+                        message = Fore.RED + "The monster claws you. -{} health.".format(monster_damage) + Style.RESET_ALL
+                        
+                        # exit player turn
+                        break
+
+            elif (player == monster2):
+                monster_health = monster_max_health
+                fighting = True
+                while fighting:
+                    while True:
+                        clear_screen()
+                        print_monster(monster_health, SIZE)
+                        print_UI(turn, health, hunger, gold)
+                        return_message(message, SIZE)
+                        message = default_message
+
+                        # players turn
+                        print("Equiped weapon:", equiped_weapon.get("name"))
+                        print("-"*2*SIZE+"---")
+                        print("You can:  1)Attack  2)Wait  3)Run  4)Change weapon")
+                        player_move = input("> ")
+
+                        if (player_move.capitalize() == "Attack") or (player_move == "1"):
+                            if len(inventory) <= 2:
+                                attack_chance = random.randint(0,5)
+                            if len(inventory) <= 4 and len(inventory) > 2:
+                                attack_chance = random.randint(0,4)
+                            if len(inventory) <= 6 and len(inventory) > 4:
+                                attack_chance = random.randint(0,3)
+                            if len(inventory) >= 7:
+                                attack_chance = random.randint(0,2)
+
+                            if attack_chance != 0:
+                                if equiped_weapon != Fists:
+                                    durability = equiped_weapon.pop("durability")
+                                    durability -= 1
+                                    if durability == 0:
+                                        inventory.remove(equiped_weapon)
+                                        equiped_weapon = Fists
+                                    else:
+                                        equiped_weapon.update({"durability":durability})
+                                message = Fore.GREEN + "You attack the monster with your {} and do {} damage".format(equiped_weapon.get("name"), equiped_weapon.get("effect")) + Style.RESET_ALL
+                                monster_health -= equiped_weapon.get("effect")
+                            else:
+                                message = Fore.RED + "You swing with your {} but you miss".format(equiped_weapon.get("name")) + Style.RESET_ALL
+
+                            # if either monster or player dies
+                            if health <= 0:
+                                fighting = False
+                            if monster_health <= 0:
+                                monster2 = None
+                        elif (player_move.capitalize() == "Wait") or (player_move.capitalize() == "2"):
+                            add_health = random.randint(1,4)*2
+                            health += add_health
+                            if health > max_health:
+                                health = max_health
+                            message = Fore.BLUE + "You rest and gain {} health".format(add_health) + Style.RESET_ALL
+                        elif (player_move.capitalize() == "Run") or (player_move.capitalize() == "3"):
+                            if len(inventory) <= 2:
+                                run_away_chance = random.randint(0,1)
+                            if len(inventory) <= 4 and len(inventory) > 2:
+                                run_away_chance = random.randint(0,2)
+                            if len(inventory) <= 6 and len(inventory) > 4:
+                                run_away_chance = random.randint(0,3)
+                            if len(inventory) >= 7:
+                                run_away_chance = random.randint(0,4)
+
+                            if run_away_chance == 0:
+                                message = Fore.GREEN + "You manage to run from the monster!" + Style.RESET_ALL
+                                escape_move = escape(player, SIZE)
+                                player, message, health = move_player(default_message, health, max_health, player, escape_move)
+                                break
+                            else:
+                                health -= 10
+                                message = Fore.RED + "You don't manage to escape the monster, -10 health" + Style.RESET_ALL
+                        elif (player_move.capitalize() == "Change") or (player_move.capitalize() == "Change weapon") or (player_move.capitalize() == "4"):
+                            missing_item = True
+                            print("-", Fists.get("name"), "  Durability: N/A", "  Damage:", Fists.get("effect"))
+                            for item in inventory:
+                                if item.get("type") == "weapon":
+                                    print("-", item.get("name"), "  Durability:", item.get("durability"), "  Damage:", item.get("effect"))
+                            print("Which item would you like to use?")
+                            weapon_change = input("> ")
+                            for item in inventory:
+                                if weapon_change.capitalize() == "Fists":
+                                    equiped_weapon = Fists
+                                    missing_item = False
+                                elif weapon_change.capitalize() == item.get("name"):
+                                    equiped_weapon = item
+                                    missing_item = False
+                            if missing_item == True:
+                                message = Fore.RED + "You don't have '{}'".format(weapon_change) + Style.RESET_ALL
+                        else:
+                            fumble_damage = random.randint(1,3)*2
+                            message = Fore.BLUE+"You fumble around while chosing what to do. " + Fore.RED + "-{} health".format(fumble_damage)+Style.RESET_ALL
+                            health -= fumble_damage
+                        
+                        # if either monster or player dies
+                        if health <= 0:
+                            fighting = False
+                        if monster_health <= 0:
+                            monster2 = None
+
+                        # exit player turn
+                        break
+
+                    while True:
+                        clear_screen()
+                        print_monster(monster_health, SIZE)
+                        print_UI(turn, health, hunger, gold)
+                        return_message(message, SIZE)
+                        message = default_message
+                        time.sleep(1)
+
+                        # monsters turn
+                        monster_damage = random.randint(1,3)*2
+                        health -= monster_damage
+                        message = Fore.RED + "The monster claws you. -{} health.".format(monster_damage) + Style.RESET_ALL
+                        
+                        # exit player turn
+                        break
+
+            elif (player == monster3):
+                monster_health = monster_max_health
+                fighting = True
+                while fighting:
+                    while True:
+                        clear_screen()
+                        print_monster(monster_health, SIZE)
+                        print_UI(turn, health, hunger, gold)
+                        return_message(message, SIZE)
+                        message = default_message
+
+                        # players turn
+                        print("Equiped weapon:", equiped_weapon.get("name"))
+                        print("-"*2*SIZE+"---")
+                        print("You can:  1)Attack  2)Wait  3)Run  4)Change weapon")
+                        player_move = input("> ")
+
+                        if (player_move.capitalize() == "Attack") or (player_move == "1"):
+                            if len(inventory) <= 2:
+                                attack_chance = random.randint(0,5)
+                            if len(inventory) <= 4 and len(inventory) > 2:
+                                attack_chance = random.randint(0,4)
+                            if len(inventory) <= 6 and len(inventory) > 4:
+                                attack_chance = random.randint(0,3)
+                            if len(inventory) >= 7:
+                                attack_chance = random.randint(0,2)
+
+                            if attack_chance != 0:
+                                if equiped_weapon != Fists:
+                                    durability = equiped_weapon.pop("durability")
+                                    durability -= 1
+                                    if durability == 0:
+                                        inventory.remove(equiped_weapon)
+                                        equiped_weapon = Fists
+                                    else:
+                                        equiped_weapon.update({"durability":durability})
+                                message = Fore.GREEN + "You attack the monster with your {} and do {} damage".format(equiped_weapon.get("name"), equiped_weapon.get("effect")) + Style.RESET_ALL
+                                monster_health -= equiped_weapon.get("effect")
+                            else:
+                                message = Fore.RED + "You swing with your {} but you miss".format(equiped_weapon.get("name")) + Style.RESET_ALL
+
+                            # if either monster or player dies
+                            if health <= 0:
+                                fighting = False
+                            if monster_health <= 0:
+                                monster3 = None
+                        elif (player_move.capitalize() == "Wait") or (player_move.capitalize() == "2"):
+                            add_health = random.randint(1,4)*2
+                            health += add_health
+                            if health > max_health:
+                                health = max_health
+                            message = Fore.BLUE + "You rest and gain {} health".format(add_health) + Style.RESET_ALL
+                        elif (player_move.capitalize() == "Run") or (player_move.capitalize() == "3"):
+                            if len(inventory) <= 2:
+                                run_away_chance = random.randint(0,1)
+                            if len(inventory) <= 4 and len(inventory) > 2:
+                                run_away_chance = random.randint(0,2)
+                            if len(inventory) <= 6 and len(inventory) > 4:
+                                run_away_chance = random.randint(0,3)
+                            if len(inventory) >= 7:
+                                run_away_chance = random.randint(0,4)
+
+                            if run_away_chance == 0:
+                                message = Fore.GREEN + "You manage to run from the monster!" + Style.RESET_ALL
+                                escape_move = escape(player, SIZE)
+                                player, message, health = move_player(default_message, health, max_health, player, escape_move)
+                                break
+                            else:
+                                health -= 10
+                                message = Fore.RED + "You don't manage to escape the monster, -10 health" + Style.RESET_ALL
+                        elif (player_move.capitalize() == "Change") or (player_move.capitalize() == "Change weapon") or (player_move.capitalize() == "4"):
+                            missing_item = True
+                            print("-", Fists.get("name"), "  Durability: N/A", "  Damage:", Fists.get("effect"))
+                            for item in inventory:
+                                if item.get("type") == "weapon":
+                                    print("-", item.get("name"), "  Durability:", item.get("durability"), "  Damage:", item.get("effect"))
+                            print("Which item would you like to use?")
+                            weapon_change = input("> ")
+                            for item in inventory:
+                                if weapon_change.capitalize() == "Fists":
+                                    equiped_weapon = Fists
+                                    missing_item = False
+                                elif weapon_change.capitalize() == item.get("name"):
+                                    equiped_weapon = item
+                                    missing_item = False
+                            if missing_item == True:
+                                message = Fore.RED + "You don't have '{}'".format(weapon_change) + Style.RESET_ALL
+                        else:
+                            fumble_damage = random.randint(1,3)*2
+                            message = Fore.BLUE+"You fumble around while chosing what to do. " + Fore.RED + "-{} health".format(fumble_damage)+Style.RESET_ALL
+                            health -= fumble_damage
+                        
+                        # if either monster or player dies
+                        if health <= 0:
+                            fighting = False
+                        if monster_health <= 0:
+                            monster3 = None
 
                         # exit player turn
                         break
