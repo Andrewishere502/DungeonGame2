@@ -994,7 +994,7 @@ def game_loop():
                         elif rps == "Exit":
                             break
                         else:
-                            message = Fore.RED + "Please type only 'Heads' or 'Tails'." + Style.RESET_ALL
+                            message = Fore.RED + "Please type only 'Rock', 'Paper' or 'Scissors'." + Style.RESET_ALL
                             continue
                         # make sure the user bets between 1 and 5 and only a number
                         bet = input("How much do you want to bet? (1G to 10G)\n> ")
@@ -1003,12 +1003,14 @@ def game_loop():
                         except ValueError:
                             message = Fore.RED + "Please only type a number (ie '3')" + Style.RESET_ALL
                             continue
-                        if (bet < 1) or (bet > 5):
+                        if (bet < 1) or (bet > 10):
                             message = Fore.RED + "You must bet between 1G and 10G" + Style.RESET_ALL
                             continue
                         else:
-                            flip_outcome = random.choice(["Heads","Tails"])
-                            if flip_outcome == heads_tails:
+                            computer_rps = random.choice(["Rock","Paper","Scissors"])
+                            if computer_rps == rps:
+                                message = Fore.BLUE + "It's a tie." + Style.RESET_ALL
+                            elif (computer_rps == "Rock" and rps == "Paper") or (computer_rps == "Paper" and rps == "Scissors") or (computer_rps == "Scissors" and rps == "Rock"):
                                 message = Fore.GREEN + "You win! +{}".format(bet) + Style.RESET_ALL 
                                 gold += bet
                             else:
