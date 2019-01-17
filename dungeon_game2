@@ -686,7 +686,7 @@ def game_loop():
 
             # auto move player for testing hehe
             # casino1 = (0,0)
-            # player = casino1
+            player = casino1
 
 
         #
@@ -947,27 +947,30 @@ def game_loop():
                 while True:
                     clear_screen()
                     print_casino(SIZE)
-                    print("Which game would you like to play? ('more' for more info)")
-                    print("1)Coin flip  2)Rock paper scissors  3)Guess the number  4)Black jack")
-                    game = input("> ")
-                    if game.capitalize() == "more":
+                    print("Which game would you like to play? ('more' for info)")
+                    print("1)Coin flip  2)R.P.S.  3)Guess the number  4)Black jack")
+                    game = input("> ").capitalize()
+                    if game == "Exit":
+                        break
+                    elif game == "More":
                         clear_screen()
-                        print("""
-                        Coin flip:
-                        You guess heads or tails and then choose how much money you want to bet, up to 5G. If you win, what you bet times two.
-
-                        Rock paper scissors:
-                        It's rock paper scissors, bet up to 10G. If you win, You get what you bet times two.
-
-                        Guess the number:
-                        You guess the number I am thinking of, 1 to 5. Then you bet up to 15G. If you guess right, you get what you bet times two.
-
-                        Black jack:
-                        Your goal is to get 21 points, one card at a time. Bet up to 100G.
-                        """)
+                        print("Coin flip:\nYou guess heads or tails and then choose how much money you want to bet, up to 5G. If you win, what you bet times two.\n\nRock paper scissors:\nIt\'s rock paper scissors, bet up to 10G. If you win, You get what you bet times two.\n\nGuess the number:\nYou guess the number I am thinking of, 1 to 5. Then you bet up to 15G. If you guess right, you get what you bet times two.\n\nBlack jack:\nYour goal is to get 21 points, one card at a time. Bet up to 100G.\n                    --->    At any time you can type 'exit' and you exit the casino.    <---")
+                        input("return to continue:")
                         continue
-                    elif (game.capitalize() == "guess the number") or (game == "1"):
-                        print("Hi")
+                    elif (game.capitalize() == "Coin flip") or (game == "1"):
+                        heads_tails = input("Heads or Tails?\n> ").capitalize()
+                        if (heads_tails != "Heads") or (heads_tails != "Tails"):
+                            print("please type only 'Heads' or 'Tails'.")
+                            input("return to continue:")
+                            continue
+                        elif heads_tails == "Exit":
+                            continue
+                        bet = input("How much do you want to bet? (1G to 5G)\n> ")
+                        try:
+                            bet = int(bet)
+                        except ValueError:
+                            print("Please only type a number (ie '3')")
+                            input("return to continue:")
 
 
         #
