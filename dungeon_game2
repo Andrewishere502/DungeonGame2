@@ -60,7 +60,7 @@ def clear_screen():
 
 # sets locations of all the tile-types
 def get_locations():
-    return random.sample(CELLS, 14)
+    return random.sample(CELLS, 15)
 
 
 # for creating the map
@@ -76,7 +76,7 @@ def set_grid(SIZE):
             y += 1
             continue
         x += 1
-def draw_map(monster1, monster2, monster3, potato_farm, mysterious1, mysterious2, shop1, chest1, chest2, chest3, berries1, berries2, berries3, player, SIZE):
+def draw_map(monster1, monster2, monster3, potato_farm, mysterious1, mysterious2, shop1, casino1, chest1, chest2, chest3, berries1, berries2, berries3, player, SIZE):
     # list_of_letters = [" A", " B", " C", " D", " E", " F", " G", " H", " I", " J", " K", " L", " M", " N", " O", " P", " Q", " R", " S", " T", " U", " V" ," W", " X", " Y", " Z"]
     # print(Fore.YELLOW+" A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"+Style.RESET_ALL)
     print((Fore.YELLOW+" _"+Style.RESET_ALL)*(SIZE+1))
@@ -93,6 +93,8 @@ def draw_map(monster1, monster2, monster3, potato_farm, mysterious1, mysterious2
                 output = tile.format(Fore.CYAN+"C"+Style.RESET_ALL)
             elif (cell == shop1):
                 output = tile.format(Fore.LIGHTYELLOW_EX+"S"+Style.RESET_ALL)
+            elif (cell == casino1):
+                output = tile.format(Fore.LIGHTYELLOW_EX+"$"+Style.RESET_ALL)
             elif (cell == potato_farm) or (cell == mysterious1) or (cell == mysterious2):
                 output = tile.format(Fore.LIGHTMAGENTA_EX+"?"+Style.RESET_ALL)
             elif (cell == monster1) or (cell == monster2) or (cell == monster3):
@@ -109,6 +111,8 @@ def draw_map(monster1, monster2, monster3, potato_farm, mysterious1, mysterious2
                 output = tile.format(Fore.CYAN+"C"+Fore.YELLOW+"|"+Style.RESET_ALL)
             elif (cell == shop1):
                 output = tile.format(Fore.LIGHTYELLOW_EX+"S"+Fore.YELLOW+"|"+Style.RESET_ALL)
+            elif (cell == casino1):
+                output = tile.format(Fore.LIGHTYELLOW_EX+"$"+Fore.YELLOW+"|"+Style.RESET_ALL)
             elif (cell == potato_farm):
                 output = tile.format(Fore.LIGHTMAGENTA_EX+"?"+Fore.YELLOW+"|"+Style.RESET_ALL)
             elif (cell == monster1) or (cell == monster2) or (cell == monster3):
@@ -380,7 +384,26 @@ def print_monster(monster_health, SIZE):
           -|_/\/ `---.|_
     """)
     print("-"*2*SIZE+"---")
-
+def print_casino(SIZE):
+    print("""
+            .------\ /------.
+            |       -       |
+            |               |
+            |               |
+            |               |
+         _______________________
+         ===========.===========
+           / ~~~~~     ~~~~~ \\
+          /|    |         |   \\
+          W   ---  / \  ---   W
+          \.      |o o|      ./
+           |                 |
+           \    #########    /
+            \  ## ----- ##  /
+             \##         ##/
+              \_____v_____/
+    """)
+    print("-"*2*SIZE+"---")
 
 # prints a message, like a recent action
 def return_message(message, SIZE):
@@ -542,7 +565,7 @@ def game_loop():
     default_message = Fore.BLACK + ("-"*2*SIZE+"---") + Style.RESET_ALL
 
     # spawn the things
-    monster1_spawn, monster2_spawn, monster3_spawn, potato_farm, mysterious1, mysterious2, shop1, chest1, chest2, chest3, berries1, berries2, berries3, player = get_locations()
+    monster1_spawn, monster2_spawn, monster3_spawn, potato_farm, mysterious1, mysterious2, shop1, casino1, chest1, chest2, chest3, berries1, berries2, berries3, player = get_locations()
     monster1 = monster1_spawn
     monster1_respawn = -1
     monster2 = monster2_spawn
@@ -562,6 +585,7 @@ def game_loop():
             monster1, monster2, monster3,
             potato_farm, mysterious1, mysterious2,
             shop1,
+            casino1,
             chest1, chest2, chest3,
             berries1, berries2, berries3,
             player,
@@ -624,6 +648,7 @@ def game_loop():
                     monster1, monster2, monster3,
                     potato_farm, mysterious1, mysterious2,
                     shop1,
+                    casino1,
                     chest1, chest2, chest3,
                     berries1, berries2, berries3,
                     player,
@@ -660,8 +685,8 @@ def game_loop():
             player, message, health = move_player(default_message, health, max_health, player, move)
 
             # auto move player for testing hehe
-            # monster1 = (0,0)
-            # player = monster1
+            # casino1 = (0,0)
+            # player = casino1
 
 
         #
@@ -690,7 +715,6 @@ def game_loop():
                 message = Fore.BLUE + "You ate some berries, +15 hunger." + Style.RESET_ALL
 
 
-
         #
         # chest and inventory management area
         #
@@ -702,6 +726,7 @@ def game_loop():
                         monster1, monster2, monster3,
                         potato_farm, mysterious1, mysterious2,
                         shop1,
+                        casino1,
                         chest1, chest2, chest3,
                         berries1, berries2, berries3,
                         player,
@@ -751,6 +776,7 @@ def game_loop():
                         monster1, monster2, monster3,
                         potato_farm, mysterious1, mysterious2,
                         shop1,
+                        casino1,
                         chest1, chest2, chest3,
                         berries1, berries2, berries3,
                         player,
@@ -800,6 +826,7 @@ def game_loop():
                         monster1, monster2, monster3,
                         potato_farm, mysterious1, mysterious2,
                         shop1,
+                        casino1,
                         chest1, chest2, chest3,
                         berries1, berries2, berries3,
                         player,
@@ -907,6 +934,21 @@ def game_loop():
                                         message = Fore.MAGENTA + "Sale cancelled." + Style.RESET_ALL
                                         break
                                 message = Fore.RED + "You don't have '{}' in your inventory".format(item.get("name")) + Style.RESET_ALL
+
+
+        #
+        # casino area
+        #
+            if (player == casino1):
+                message = Fore.GREEN+"You entered the casino!"+Style.RESET_ALL
+                while True:
+                    print_casino(SIZE)
+                    print("Which game would you like to play?")
+                    print("1)coin flip  2)guess the number  3)rock paper scissors  4)black jack  ")
+                    game = input("> ")
+                    if (game == "guess the number") or (game == "1"):
+
+
 
 
         #
@@ -1301,6 +1343,7 @@ def game_loop():
                     monster1, monster2, monster3,
                     potato_farm, mysterious1, mysterious2,
                     shop1,
+                    casino1,
                     chest1, chest2, chest3,
                     berries1, berries2, berries3,
                     player,
