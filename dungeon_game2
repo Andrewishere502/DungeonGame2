@@ -685,7 +685,7 @@ def game_loop():
             player, message, health = move_player(default_message, health, max_health, player, move)
             # auto move player for testing hehe
             # casino1 = (0,0)
-            player = casino1
+            # player = casino1
 
 
         #
@@ -988,7 +988,32 @@ def game_loop():
                                 message = Fore.RED + "You lose! -{}".format(bet) + Style.RESET_ALL 
                                 gold -= bet
                     elif (game.capitalize() == "R.p.s") or (game.capitalize() == "Rock paper scissors") or (game == "2"):
-                        input("Under construction!\n> ")
+                        rps = input("Rock, Paper or Scissors?\n> ").capitalize()
+                        if (rps == "Rock") or (rps == "Paper") or (rps == "Scissors"):
+                            pass
+                        elif rps == "Exit":
+                            break
+                        else:
+                            message = Fore.RED + "Please type only 'Heads' or 'Tails'." + Style.RESET_ALL
+                            continue
+                        # make sure the user bets between 1 and 5 and only a number
+                        bet = input("How much do you want to bet? (1G to 10G)\n> ")
+                        try:
+                            bet = int(bet)
+                        except ValueError:
+                            message = Fore.RED + "Please only type a number (ie '3')" + Style.RESET_ALL
+                            continue
+                        if (bet < 1) or (bet > 5):
+                            message = Fore.RED + "You must bet between 1G and 10G" + Style.RESET_ALL
+                            continue
+                        else:
+                            flip_outcome = random.choice(["Heads","Tails"])
+                            if flip_outcome == heads_tails:
+                                message = Fore.GREEN + "You win! +{}".format(bet) + Style.RESET_ALL 
+                                gold += bet
+                            else:
+                                message = Fore.RED + "You lose! -{}".format(bet) + Style.RESET_ALL 
+                                gold -= bet
                     elif (game.capitalize() == "Guess the number") or (game == "3"):
                         input("Under construction!\n> ")
                     elif (game.capitalize() == "Black jack") or (game == "4"):
