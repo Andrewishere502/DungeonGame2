@@ -950,7 +950,7 @@ def game_loop():
                     return_message(message, SIZE)
                     message = default_message
                     print("Which game would you like to play? ('more' for info)")
-                    print("1)Coin flip  2)R.P.S.  3)Guess the number  4)Black jack")
+                    print("1)Coin flip  2)R.P.S.  3)Guess the number  4)Blackjack")
                     game = input("> ").capitalize()
                     if game == "Exit":
                         break
@@ -970,14 +970,14 @@ def game_loop():
                             message = Fore.RED + "Please type only 'Heads' or 'Tails'." + Style.RESET_ALL
                             continue
                         # make sure the user bets between 1 and 5 and only a number
-                        bet = input("How much do you want to bet? (1G to 5G)\n> ")
+                        bet = input("How much do you want to bet? (1 to 5)\n> ")
                         try:
                             bet = int(bet)
                         except ValueError:
                             message = Fore.RED + "Please only type a number (ie '3')" + Style.RESET_ALL
                             continue
                         if (bet < 1) or (bet > 5):
-                            message = Fore.RED + "You must bet between 1G and 5G" + Style.RESET_ALL
+                            message = Fore.RED + "You must bet between 1 and 5" + Style.RESET_ALL
                             continue
                         else:
                             flip_outcome = random.choice(["Heads","Tails"])
@@ -997,14 +997,14 @@ def game_loop():
                             message = Fore.RED + "Please type only 'Rock', 'Paper' or 'Scissors'." + Style.RESET_ALL
                             continue
                         # make sure the user bets between 1 and 5 and only a number
-                        bet = input("How much do you want to bet? (1G to 10G)\n> ")
+                        bet = input("How much do you want to bet? (1 to 10)\n> ")
                         try:
                             bet = int(bet)
                         except ValueError:
                             message = Fore.RED + "Please only type a number (ie '3')" + Style.RESET_ALL
                             continue
                         if (bet < 1) or (bet > 10):
-                            message = Fore.RED + "You must bet between 1G and 10G" + Style.RESET_ALL
+                            message = Fore.RED + "You must bet between 1 and 10" + Style.RESET_ALL
                             continue
                         else:
                             computer_rps = random.choice(["Rock","Paper","Scissors"])
@@ -1017,8 +1017,35 @@ def game_loop():
                                 message = Fore.RED + "You lose! -{}".format(bet) + Style.RESET_ALL 
                                 gold -= bet
                     elif (game.capitalize() == "Guess the number") or (game == "3"):
-                        input("Under construction!\n> ")
-                    elif (game.capitalize() == "Black jack") or (game == "4"):
+                        num_guess = input("Guess a number between 1 and 5\n> ").capitalize()
+                        try:
+                            num_guess = int(num_guess)
+                        except ValueError:
+                            message = Fore.RED + "Please only type a number (ie '3')" + Style.RESET_ALL
+                            continue
+                        if num_guess >= 1 and num_guess <= 10:
+                            pass
+                        elif num_guess == "Exit":
+                            break
+                        # make sure the user bets between 1 and 5 and only a number
+                        bet = input("How much do you want to bet? (1 to 10)\n> ")
+                        try:
+                            bet = int(bet)
+                        except ValueError:
+                            message = Fore.RED + "Please only type a number (ie '3')" + Style.RESET_ALL
+                            continue
+                        if (bet < 1) or (bet > 15):
+                            message = Fore.RED + "You must bet between 1 and 15" + Style.RESET_ALL
+                            continue
+                        else:
+                            computer_num_guess = random.randint(1,5)
+                            if computer_num_guess == num_guess:
+                                message = Fore.GREEN + "You win! +{}".format(bet) + Style.RESET_ALL 
+                                gold += bet
+                            else:
+                                message = Fore.RED + "You lose! -{}".format(bet) + Style.RESET_ALL 
+                                gold -= bet
+                    elif (game.capitalize() == "Blackjack") or (game == "4"):
                         input("Under construction!\n> ")
 
 
