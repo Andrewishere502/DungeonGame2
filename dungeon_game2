@@ -745,6 +745,7 @@ def game_loop():
                     get_item = input("> ")
                     if get_item.lower() == "exit":
                         message = default_message
+                        break
 
                     # print current inventory
                     elif get_item.lower() == "i":
@@ -795,6 +796,7 @@ def game_loop():
                     get_item = input("> ")
                     if get_item.lower() == "exit":
                         message = default_message
+                        break
 
                     # print current inventory
                     elif get_item.lower() == "i":
@@ -845,6 +847,7 @@ def game_loop():
                     get_item = input("> ")
                     if get_item.lower() == "exit":
                         message = default_message
+                        break
 
                     # print current inventory
                     elif get_item.lower() == "i":
@@ -945,16 +948,22 @@ def game_loop():
                     clear_screen()
                     print_casino(SIZE)
                     print("Which game would you like to play? ('more' for more info)")
-                    print("1)coin flip  2)guess the number  3)rock paper scissors  4)black jack  ")
+                    print("1)Coin flip  2)Guess the number  3)Rock paper scissors  4)Black jack")
                     game = input("> ")
                     if game.capitalize() == "more":
                         clear_screen()
-                        print("Coin flip: You guess heads or tails and then choose how much money you want to bet, up to 5G")
+                        print("""
+                        Coin flip:
+                        You guess heads or tails and then choose how much money you want to bet, up to 5G. If you win, what you bet times two.
+
+                        Guess the number:
+                        You guess the number I am thinking of, 1 to 5. Then you bet up to 15G. If you guess right, you earn what you bet times two.
+
+                        Rock paper scissors
+                        """)
                         continue
                     elif (game.capitalize() == "guess the number") or (game == "1"):
                         print("Hi")
-
-
 
 
         #
