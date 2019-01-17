@@ -959,11 +959,13 @@ def game_loop():
                         continue
                     elif (game.capitalize() == "Coin flip") or (game == "1"):
                         heads_tails = input("Heads or Tails?\n> ").capitalize()
-                        if (heads_tails != "Heads") or (heads_tails != "Tails"):
+                        if (heads_tails == "Heads") or (heads_tails == "Tails"):
+                            pass
+                        elif heads_tails == "Exit":
+                            continue
+                        else:
                             print("please type only 'Heads' or 'Tails'.")
                             input("return to continue:")
-                            continue
-                        elif heads_tails == "Exit":
                             continue
                         bet = input("How much do you want to bet? (1G to 5G)\n> ")
                         try:
@@ -971,6 +973,8 @@ def game_loop():
                         except ValueError:
                             print("Please only type a number (ie '3')")
                             input("return to continue:")
+                            continue
+                        print("good")
 
 
         #
