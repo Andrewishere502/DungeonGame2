@@ -928,6 +928,11 @@ def game_loop():
                                     confirm_sale = input("(y/n)\n> ").lower()
                                     if confirm_sale == "y":
                                         gold += item.get("value")
+
+                                        # fixed a bug where the equiped weapon could stay the same even if the user sold it, not tested
+                                        if item == equiped_weapon:
+                                            equiped_weapon = Fists
+
                                         inventory.remove(item)
                                         items_in_shop1.append(item)
                                         message = Fore.MAGENTA + "You sold 1 {} for {}G.".format(item.get("name"), item.get("value")) + Style.RESET_ALL
@@ -935,7 +940,7 @@ def game_loop():
                                     else:
                                         message = Fore.MAGENTA + "Sale cancelled." + Style.RESET_ALL
                                         break
-                                message = Fore.RED + "You don't have '{}' in your inventory".format(item.get("name")) + Style.RESET_ALL
+                                message = Fore.RED + "You don't have '{}' in your inventory".format(sell_item) + Style.RESET_ALL
 
 
         #
@@ -1028,7 +1033,7 @@ def game_loop():
                         elif num_guess == "Exit":
                             break
                         # make sure the user bets between 1 and 5 and only a number
-                        bet = input("How much do you want to bet? (1 to 10)\n> ")
+                        bet = input("How much do you want to bet? (1 to 15)\n> ")
                         try:
                             bet = int(bet)
                         except ValueError:
@@ -1046,7 +1051,7 @@ def game_loop():
                                 message = Fore.RED + "You lose! -{}".format(bet) + Style.RESET_ALL 
                                 gold -= bet
                     elif (game.capitalize() == "Blackjack") or (game == "4"):
-                        input("Under construction!\n> ")
+                        print("Hello, welcome to black jack!")
 
 
         #
@@ -1451,6 +1456,7 @@ def game_loop():
                 return_message(message, SIZE)
                 print("A lady waves you over to her, she is standing behind\na small counter that says 'POTATO SALE'")
                 go_to_lady = input("Do you walk up to her?\n(y/n)\n> ").lower()
+                message = default_message
                 if go_to_lady == "y":
                     while True:
                         clear_screen()
