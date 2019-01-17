@@ -942,11 +942,17 @@ def game_loop():
             if (player == casino1):
                 message = Fore.GREEN+"You entered the casino!"+Style.RESET_ALL
                 while True:
+                    clear_screen()
                     print_casino(SIZE)
-                    print("Which game would you like to play?")
+                    print("Which game would you like to play? ('more' for more info)")
                     print("1)coin flip  2)guess the number  3)rock paper scissors  4)black jack  ")
                     game = input("> ")
-                    if (game == "guess the number") or (game == "1"):
+                    if game.capitalize() == "more":
+                        clear_screen()
+                        print("Coin flip: You guess heads or tails and then choose how much money you want to bet, up to 5G")
+                        continue
+                    elif (game.capitalize() == "guess the number") or (game == "1"):
+                        print("Hi")
 
 
 
