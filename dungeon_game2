@@ -948,7 +948,7 @@ def game_loop():
                     clear_screen()
                     print_casino(SIZE)
                     print("Which game would you like to play? ('more' for more info)")
-                    print("1)Coin flip  2)Guess the number  3)Rock paper scissors  4)Black jack")
+                    print("1)Coin flip  2)Rock paper scissors  3)Guess the number  4)Black jack")
                     game = input("> ")
                     if game.capitalize() == "more":
                         clear_screen()
@@ -956,10 +956,14 @@ def game_loop():
                         Coin flip:
                         You guess heads or tails and then choose how much money you want to bet, up to 5G. If you win, what you bet times two.
 
-                        Guess the number:
-                        You guess the number I am thinking of, 1 to 5. Then you bet up to 15G. If you guess right, you earn what you bet times two.
+                        Rock paper scissors:
+                        It's rock paper scissors, bet up to 10G. If you win, You get what you bet times two.
 
-                        Rock paper scissors
+                        Guess the number:
+                        You guess the number I am thinking of, 1 to 5. Then you bet up to 15G. If you guess right, you get what you bet times two.
+
+                        Black jack:
+                        Your goal is to get 21 points, one card at a time. Bet up to 100G.
                         """)
                         continue
                     elif (game.capitalize() == "guess the number") or (game == "1"):
