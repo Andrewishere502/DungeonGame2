@@ -683,7 +683,6 @@ def game_loop():
         elif move in valid_moves:
             # update where the player is
             player, message, health = move_player(default_message, health, max_health, player, move)
-
             # auto move player for testing hehe
             # casino1 = (0,0)
             player = casino1
@@ -947,6 +946,9 @@ def game_loop():
                 while True:
                     clear_screen()
                     print_casino(SIZE)
+                    print_UI(turn, health, hunger, gold)
+                    return_message(message, SIZE)
+                    message = default_message
                     print("Which game would you like to play? ('more' for info)")
                     print("1)Coin flip  2)R.P.S.  3)Guess the number  4)Black jack")
                     game = input("> ").capitalize()
@@ -958,23 +960,39 @@ def game_loop():
                         input("return to continue:")
                         continue
                     elif (game.capitalize() == "Coin flip") or (game == "1"):
+                        # make sure the user chooses either heads or tails
                         heads_tails = input("Heads or Tails?\n> ").capitalize()
                         if (heads_tails == "Heads") or (heads_tails == "Tails"):
                             pass
                         elif heads_tails == "Exit":
-                            continue
+                            break
                         else:
-                            print("please type only 'Heads' or 'Tails'.")
-                            input("return to continue:")
+                            message = Fore.RED + "Please type only 'Heads' or 'Tails'." + Style.RESET_ALL
                             continue
+                        # make sure the user bets between 1 and 5 and only a number
                         bet = input("How much do you want to bet? (1G to 5G)\n> ")
                         try:
                             bet = int(bet)
                         except ValueError:
-                            print("Please only type a number (ie '3')")
-                            input("return to continue:")
+                            message = Fore.RED + "Please only type a number (ie '3')" + Style.RESET_ALL
                             continue
-                        print("good")
+                        if (bet < 1) or (bet > 5):
+                            message = Fore.RED + "You must bet between 1G and 5G" + Style.RESET_ALL
+                            continue
+                        else:
+                            flip_outcome = random.choice(["Heads","Tails"])
+                            if flip_outcome == heads_tails:
+                                message = Fore.GREEN + "You win! +{}".format(bet) + Style.RESET_ALL 
+                                gold += bet
+                            else:
+                                message = Fore.RED + "You lose! -{}".format(bet) + Style.RESET_ALL 
+                                gold -= bet
+                    elif (game.capitalize() == "R.p.s") or (game.capitalize() == "Rock paper scissors") or (game == "2"):
+                        input("Under construction!\n> ")
+                    elif (game.capitalize() == "Guess the number") or (game == "3"):
+                        input("Under construction!\n> ")
+                    elif (game.capitalize() == "Black jack") or (game == "4"):
+                        input("Under construction!\n> ")
 
 
         #
