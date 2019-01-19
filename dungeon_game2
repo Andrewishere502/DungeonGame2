@@ -411,6 +411,17 @@ def return_message(message, SIZE):
     print("-"*2*SIZE+"---")
 
 
+# the tutorial
+def tutorial():
+    print("This is a small adventure game where you, the player, move around a map collecting loot. It's not all fun and games though, if you don't keep your hunger and health up you will die and lose all your progress.")
+    print("Anyway, now on to the controls and stuff.")
+    print("Every time you want to complete an action you need to click return. Yes, that means you can't just click the arrow keys, you need to type 'n', 's', 'e' or 'w' AND THEN click enter to move.")
+    print("Another thing you might want to note is that you should READ THE WORDS on the page. Just be patient please, this is only the first real game I've made.")
+    print("Thanks for playing!")
+    print("-MegaMogul")
+    input("\nPress return to continue:")
+    clear_screen()
+
 # the game loop, very important!!
 def game_loop():
     # define basic player stats
@@ -419,7 +430,7 @@ def game_loop():
     max_health = 100
     hunger = 100
     max_hunger = 100
-    gold = 10000
+    gold = 10
     fashion = 0
     kills = 0
 
@@ -621,7 +632,6 @@ def game_loop():
             break
         elif move == "??":
             clear_screen()
-            print("In this game you control a character that moves around a small map. Your goal is to avoid the monsters while exploring and having fun!")
             print("Key:")
             print("X = player")
             print("+ = berry")
@@ -691,7 +701,7 @@ def game_loop():
             player, message, health = move_player(default_message, health, max_health, player, move)
             # auto move player for testing hehe
             # casino1 = (0,0)
-            player = casino1
+            # player = casino1
 
 
         #
@@ -1231,6 +1241,7 @@ def game_loop():
                                 continue
                     else:
                         message = Fore.BLUE + "{} isn't the name or number of a game." + Style.RESET_ALL
+
 
         #
         # mysterious area
@@ -2054,5 +2065,6 @@ SIZE = 26
 SIZE -= 1
 set_grid(SIZE)
 clear_screen()
+tutorial()
 print_title()
 game_loop()
