@@ -150,7 +150,7 @@ def move_player(default_message, health, max_health, player, move):
     if move == "WAIT":
         if health != max_health:
             health += 1
-            message = Fore.BLUE + "You rest and gain 1 health" + Style.RESET_ALL
+            message = Fore.BLUE + "You rest and gain 1 health." + Style.RESET_ALL
     player = x, y
     return player, message, health
 def get_moves(player, SIZE):
@@ -419,7 +419,7 @@ def game_loop():
     max_health = 100
     hunger = 100
     max_hunger = 100
-    gold = 10
+    gold = 10000
     fashion = 0
     kills = 0
 
@@ -451,13 +451,13 @@ def game_loop():
         "name":"Potato",
         "durability":1,
         "effect":7,
-        "value":10,
+        "value":11,
         "type":"food"
         },{
         "name":"Melon",
         "durability":3,
         "effect":4,
-        "value":15,
+        "value":16,
         "type":"food"
         },{
         "name":"Pineapple",
@@ -469,44 +469,50 @@ def game_loop():
         "name":"Papaya",
         "durability":1,
         "effect":4,
-        "value":6,
+        "value":8,
+        "type":"food"
+        },{
+        "name":"Nugget",
+        "durability":1,
+        "effect":50,
+        "value":50,
         "type":"food"
         }]
     tools = [{
         "name":"Sword",
         "durability":3,
         "effect":10,
-        "value":50,
+        "value":35,
         "type":"weapon"
         },{
         "name":"Shield",
         "durability":3,
         "effect":2,
-        "value":40,
+        "value":11,
         "type":"weapon"
         },{
         "name":"Axe",
         "durability":5,
         "effect":20,
-        "value":100,
+        "value":105,
         "type":"weapon"
         },{
         "name":"Staff",
         "durability":7,
         "effect":7,
-        "value":50,
+        "value":54,
         "type":"weapon"
         },{
         "name":"Mace",
         "durability":2,
         "effect":14,
-        "value":65,
+        "value":33,
         "type":"weapon"
         },{
         "name":"Club",
         "durability":5,
         "effect":6,
-        "value":30,
+        "value":35,
         "type":"weapon"
         }]
     # inventory starts with food and a random weapon, the max items in the inventory is 7
@@ -679,13 +685,13 @@ def game_loop():
                             inventory.append(item)
                             break
                     else:
-                        message = (Fore.RED+"You can not eat {}".format(eat)+Style.RESET_ALL)
+                        message = (Fore.RED+"You can not eat '{}'.".format(eat)+Style.RESET_ALL)
         elif move in valid_moves:
             # update where the player is
             player, message, health = move_player(default_message, health, max_health, player, move)
             # auto move player for testing hehe
             # casino1 = (0,0)
-            # player = casino1
+            player = casino1
 
 
         #
@@ -718,7 +724,7 @@ def game_loop():
         # chest and inventory management area
         #
             if (player == chest1):
-                message = Fore.GREEN+"You opened chest 1"+Style.RESET_ALL
+                message = Fore.GREEN+"You opened chest 1."+Style.RESET_ALL
                 while True:
                     clear_screen()
                     draw_map(
@@ -759,17 +765,17 @@ def game_loop():
                             if get_item.capitalize() == item.get("name"):
                                 if item.get("name") != "Gold":
                                     inventory.append(item)
-                                    message = Fore.MAGENTA+"Added 1 '{}' to your inventory".format(item.get("name"))+Style.RESET_ALL
+                                    message = Fore.MAGENTA+"Added 1 {} to your inventory.".format(item.get("name"))+Style.RESET_ALL
                                 else:
                                     gold += item.get("value")
-                                    message = Fore.MAGENTA+"Added '{}' Gold to your gold".format(item.get("value"))+Style.RESET_ALL
+                                    message = Fore.MAGENTA+"Added {} Gold to your gold.".format(item.get("value"))+Style.RESET_ALL
                                 items_in_chest1.remove(item)
                             else:
-                                message = Fore.RED+"'{}' is not an item in this chest".format(get_item)+Style.RESET_ALL
+                                message = Fore.RED+"'{}' is not an item in this chest.".format(get_item)+Style.RESET_ALL
                     else:
                         message = Fore.RED+"Your inventory is full. Use an item to make room."+Style.RESET_ALL
             if (player == chest2):
-                message = Fore.GREEN+"You opened chest 2"+Style.RESET_ALL
+                message = Fore.GREEN+"You opened chest 2."+Style.RESET_ALL
                 while True:
                     clear_screen()
                     draw_map(
@@ -810,17 +816,17 @@ def game_loop():
                             if get_item.capitalize() == item.get("name"):
                                 if item.get("name") != "Gold":
                                     inventory.append(item)
-                                    message = Fore.MAGENTA+"Added 1 {} to 'inventory'".format(item.get("name"))+Style.RESET_ALL
+                                    message = Fore.MAGENTA+"Added 1 {} to inventory.".format(item.get("name"))+Style.RESET_ALL
                                 else:
                                     gold += item.get("value")
-                                    message = Fore.MAGENTA+"Added '{}' Gold to your gold".format(item.get("value"))+Style.RESET_ALL
+                                    message = Fore.MAGENTA+"Added {} Gold to your gold.".format(item.get("value"))+Style.RESET_ALL
                                 items_in_chest2.remove(item)
                             else:
-                                message = Fore.RED+"'{}' is not an item in this chest".format(get_item)+Style.RESET_ALL
+                                message = Fore.RED+"'{}' is not an item in this chest.".format(get_item)+Style.RESET_ALL
                     else:
                         message = Fore.RED+"Your inventory is full. Use an item to make room."+Style.RESET_ALL
             if (player == chest3):
-                message = Fore.GREEN+"You opened chest 3"+Style.RESET_ALL
+                message = Fore.GREEN+"You opened chest 3."+Style.RESET_ALL
                 while True:
                     clear_screen()
                     draw_map(
@@ -861,13 +867,13 @@ def game_loop():
                             if get_item.capitalize() == item.get("name"):
                                 if item.get("name") != "Gold":
                                     inventory.append(item)
-                                    message = Fore.MAGENTA+"Added 1 {} to 'inventory'".format(item.get("name"))+Style.RESET_ALL
+                                    message = Fore.MAGENTA+"Added 1 {} to inventory.".format(item.get("name"))+Style.RESET_ALL
                                 else:
                                     gold += item.get("value")
-                                    message = Fore.MAGENTA+"Added '{}' Gold to your gold".format(item.get("value"))+Style.RESET_ALL
+                                    message = Fore.MAGENTA+"Added {} Gold to your gold.".format(item.get("value"))+Style.RESET_ALL
                                 items_in_chest3.remove(item)
                             else:
-                                message = Fore.RED+"'{}' is not an item in this chest".format(get_item)+Style.RESET_ALL
+                                message = Fore.RED+"'{}' is not an item in this chest.".format(get_item)+Style.RESET_ALL
                     else:
                         message = Fore.RED+"Your inventory is full. Use an item to make room."+Style.RESET_ALL
 
@@ -902,7 +908,7 @@ def game_loop():
                         for item in items_in_shop1:
                             if buy_item == item.get("name"):
                                 if gold < item.get("value"):
-                                    message = Fore.RED + "You don't have enough money to afford {}".format(item.get("name")) + Style.RESET_ALL
+                                    message = Fore.RED + "You don't have enough money to afford {}.".format(item.get("name")) + Style.RESET_ALL
                                     break
                                 else:
                                     print("Are you sure you want to buy 1 {} for {}G.".format(item.get("name"), item.get("value")))
@@ -940,7 +946,7 @@ def game_loop():
                                     else:
                                         message = Fore.MAGENTA + "Sale cancelled." + Style.RESET_ALL
                                         break
-                                message = Fore.RED + "You don't have '{}' in your inventory".format(sell_item) + Style.RESET_ALL
+                                message = Fore.RED + "You don't have '{}' in your inventory.".format(sell_item) + Style.RESET_ALL
 
 
         #
@@ -961,8 +967,8 @@ def game_loop():
                         break
                     elif game == "More":
                         clear_screen()
-                        print("Coin flip:\nYou guess heads or tails and then choose how much money you want to bet, up to 5G. If you win, what you bet times two.\n\nRock paper scissors:\nIt\'s rock paper scissors, bet up to 10G. If you win, You get what you bet times two.\n\nGuess the number:\nYou guess the number I am thinking of, 1 to 5. Then you bet up to 15G. If you guess right, you get what you bet times two.\n\nBlack jack:\nYour goal is to get 21 points, one card at a time. Bet up to 100G.\n                    --->    At any time you can type 'exit' and you exit the casino.    <---")
-                        input("return to continue:")
+                        print("Coin flip:\nYou guess heads or tails and then choose how much money you want to bet, up to 5G. If you win, you get what you bet times two.\n\nRock paper scissors:\nIt\'s rock paper scissors, bet up to 10G. If you win, you get what you bet times two.\n\nGuess the number:\nYou guess the number I am thinking of, 1 to 5. Then you bet up to 15G. If you guess right, you get what you bet times two.\n\nBlack jack:\nYour goal is to get 21 points, one card at a time. Bet up to 100G. If you win, you win the whole pot.\n\n                    --->    Type 'exit' and you exit the casino. Unless you are mid game.    <---")
+                        input("\n\n\n\nreturn to continue:")
                         continue
                     elif (game.capitalize() == "Coin flip") or (game == "1"):
                         # make sure the user chooses either heads or tails
@@ -979,18 +985,18 @@ def game_loop():
                         try:
                             bet = int(bet)
                         except ValueError:
-                            message = Fore.RED + "Please only type a number (ie '3')" + Style.RESET_ALL
+                            message = Fore.RED + "Please only type a number (ie '3')." + Style.RESET_ALL
                             continue
                         if (bet < 1) or (bet > 5):
-                            message = Fore.RED + "You must bet between 1 and 5" + Style.RESET_ALL
+                            message = Fore.RED + "You must bet between 1 and 5." + Style.RESET_ALL
                             continue
                         else:
                             flip_outcome = random.choice(["Heads","Tails"])
                             if flip_outcome == heads_tails:
-                                message = Fore.GREEN + "You win! +{}".format(bet) + Style.RESET_ALL 
+                                message = Fore.GREEN + "You win! +{}.".format(bet) + Style.RESET_ALL 
                                 gold += bet
                             else:
-                                message = Fore.RED + "You lose! -{}".format(bet) + Style.RESET_ALL 
+                                message = Fore.RED + "You lose! -{}.".format(bet) + Style.RESET_ALL 
                                 gold -= bet
                     elif (game.capitalize() == "R.p.s") or (game.capitalize() == "Rock paper scissors") or (game == "2"):
                         rps = input("Rock, Paper or Scissors?\n> ").capitalize()
@@ -1051,8 +1057,180 @@ def game_loop():
                                 message = Fore.RED + "You lose! -{}".format(bet) + Style.RESET_ALL 
                                 gold -= bet
                     elif (game.capitalize() == "Blackjack") or (game == "4"):
-                        print("Hello, welcome to black jack!")
+                        clear_screen()
+                        print_casino(SIZE)
+                        print_UI(turn, health, hunger, gold)
+                        return_message(message, SIZE)
+                        # the ante is how much it costs to play
+                        if gold < 50:
+                            message = Fore.RED + "You need at least 50G to play." + Style.RESET_ALL
+                            continue
+                        ante = input("To play this game you must bet " + Fore.YELLOW + "5G" + Style.RESET_ALL + " to start.\nWould you like to play?\n(y/n)\n> ")
+                        # the pot starts at 5 because the computer has to ante up as well
+                        pot = 5
+                        if ante.lower() == "y":
+                            gold -= 5
+                            pot += 5
+                            clear_screen()
+                            print_casino(SIZE)
+                            print_UI(turn, health, hunger, gold)
+                            return_message(message, SIZE)
+                            message = Fore.YELLOW + "Pot: " + str(pot) + Style.RESET_ALL
+                        else:
+                            break
+                        # this is the full deck of cards
+                        cards = [1,2,3,4,5,6,7,8,9,10,10,10,10, 1,2,3,4,5,6,7,8,9,10,10,10,10, 1,2,3,4,5,6,7,8,9,10,10,10,10, 1,2,3,4,5,6,7,8,9,10,10,10,10]
+                        # cards the player has
+                        your_cards = []
+                        # total of the players cards
+                        total_p_cards = 0
+                        # computers cards
+                        computer_cards = []
+                        # total of the computers cards
+                        total_c_cards = 0
+                        # starting cards, these will got to the computer
+                        start_cards = random.sample(cards, 2)
+                        # deletes used cards
+                        for card in start_cards:
+                            cards.remove(card)
+                        computer_cards.extend(start_cards)
+                        print("Computer cards:")
+                        show_card1 = computer_cards[0]
+                        print("Card:", show_card1)
+                        computer_cards.remove(show_card1)
+                        for card in computer_cards:
+                            total_c_cards += card
+                            print("Card: ?")
+                        computer_cards.insert(0, show_card1)
+                        total_c_cards += show_card1
+                        print("-"*2*SIZE+"---")
+                        # these will go to the player
+                        start_cards = random.sample(cards, 2)
+                        your_cards.extend(start_cards)
+                        print("Your cards:")
+                        for card in your_cards:
+                            total_p_cards += card
+                            print("Card:", card)
+                        print(Fore.GREEN + "Total of your cards:", str(total_p_cards) + Style.RESET_ALL)
+                        print("-"*2*SIZE+"---")
+                        # now the betting starts
+                        betting = True
+                        while betting == True:
+                            clear_screen()
+                            print_casino(SIZE)
+                            print_UI(turn, health, hunger, gold)
+                            return_message(message, SIZE)
+                            message = Fore.YELLOW + "Pot: " + str(pot) + Style.RESET_ALL
+                            print("Computer cards:")
+                            show_card1 = computer_cards[0]
+                            print("Card:", show_card1)
+                            computer_cards.remove(show_card1)
+                            total_c_cards = 0
+                            for card in computer_cards:
+                                total_c_cards += card
+                                print("Card: ?")
+                            computer_cards.insert(0, show_card1)
+                            total_c_cards += show_card1
+                            print("-"*2*SIZE+"---")
+                            print("Your cards:")
+                            total_p_cards = 0
+                            for card in your_cards:
+                                total_p_cards += card
+                                print("Card:", card)
+                            print(Fore.GREEN + "Total of your cards:", str(total_p_cards) + Style.RESET_ALL)
+                            print("-"*2*SIZE+"---")
+                            if gold < 5:
+                                message = Fore.RED + "You ran out of money that you could spend." + Style.RESET_ALL
+                                break
+                            bet = input("How much would you like to bet? (5 to 100)\n> ")
+                            try:
+                                bet = int(bet)
+                            except ValueError:
+                                message = Fore.RED + "Please only type a number (ie '3')" + Style.RESET_ALL
+                                continue
+                            if (bet < 5) or (bet > 100):
+                                message = Fore.RED + "You must bet between 5 and 100" + Style.RESET_ALL
+                                continue
+                            else:
+                                gold -= bet
+                                pot += bet
+                                message = Fore.YELLOW + "Pot: " + str(pot) + Style.RESET_ALL
+                                choosing_hit_stand_fold = True
+                                while choosing_hit_stand_fold == True:
+                                    clear_screen()
+                                    print_casino(SIZE)
+                                    print_UI(turn, health, hunger, gold)
+                                    return_message(message, SIZE)
+                                    print("Computer cards:")
+                                    show_card1 = computer_cards[0]
+                                    print("Card:", show_card1)
+                                    computer_cards.remove(show_card1)
+                                    for card in computer_cards:
+                                        print("Card: ?")
+                                    computer_cards.insert(0, show_card1)
+                                    print("-"*2*SIZE+"---")
+                                    print("Your cards:")
+                                    for card in your_cards:
+                                        print("Card:", card)
+                                    print(Fore.GREEN + "Total of your cards:", str(total_p_cards) + Style.RESET_ALL)
+                                    print("-"*2*SIZE+"---")
+                                    print(Fore.RED + "Don't go over 21!" + Style.RESET_ALL)
+                                    hit_stand_fold = input("1)Hit  2)Stand  3)Fold\n> ").capitalize()
+                                    if (hit_stand_fold == "Hit") or (hit_stand_fold == "1"):
+                                        add_card = random.choice(cards)
+                                        cards.remove(add_card)
+                                        your_cards.append(add_card)
+                                        total_p_cards += add_card
+                                        choosing_hit_stand_fold = False
+                                    elif (hit_stand_fold == "Stand") or (hit_stand_fold == "2"):
+                                        hit_stand_fold ="Stand"
+                                        choosing_hit_stand_fold = False
+                                    elif (hit_stand_fold == "Fold") or (hit_stand_fold == "3"):
+                                        input("under construction")
+                                    else:
+                                        message = Fore.RED + "Please write only 'Hit' 'Stand' or 'Fold'" + Style.RESET_ALL
+                                        continue
 
+                            # total_c_cards += add_card
+                            if total_p_cards > 21:
+                                message = Fore.RED + "You busted, you lose." + Style.RESET_ALL
+                                break
+
+                            pot += bet
+                            c_hit_stand_fold = "Hit"
+                            if (total_c_cards >= 16) and (total_c_cards <= 21):
+                                c_hit_stand_fold = "Stand"
+                            elif (total_c_cards < 16):
+                                add_card = random.choice(cards)
+                                total_p_cards += add_card
+                                cards.remove(add_card)
+                                computer_cards.append(add_card)
+                            else:
+                                message = Fore.GREEN + "Computer busts, you win! +{}".format(pot) + Style.RESET_ALL
+                                gold += pot
+                                break
+
+                            if c_hit_stand_fold == "Stand" and hit_stand_fold == "Stand":
+                                input("> ")
+                                total_p_cards = 0
+                                for card in your_cards:
+                                    total_p_cards += card
+                                total_c_cards = 0
+                                for card in your_cards:
+                                    total_c_cards += card
+                                if total_p_cards > total_c_cards:
+                                    message = Fore.GREEN + "You win! +{}".format(pot) + Style.RESET_ALL
+                                    gold += pot
+                                    break
+                                elif total_p_cards < total_c_cards:
+                                    message = Fore.RED + "You lose :(" + Style.RESET_ALL
+                                else:
+                                    message =  Fore.BLUE + "You win! +{}".format(pot) + Style.RESET_ALL
+                                    gold += round(pot/2)
+                            else:
+                                continue
+                    else:
+                        message = Fore.BLUE + "{} isn't the name or number of a game." + Style.RESET_ALL
 
         #
         # mysterious area
@@ -1121,7 +1299,7 @@ def game_loop():
                             take_item_from_body = input("\nThere is a {} that you think you can take. Do you take it?\n(y/n)\n> ".format(item_on_body.get("name"))).lower()
                             if take_item_from_body == "y":
                                 inventory.append(item_on_body)
-                                message = Fore.MAGENTA+"You got a {}".format(item_on_body.get("name"))+Style.RESET_ALL
+                                message = Fore.MAGENTA+"You got a {}.".format(item_on_body.get("name"))+Style.RESET_ALL
                         else:
                             message = Fore.MAGENTA+"You leave the open grave and continue on your journey."+Style.RESET_ALL
                     else:
@@ -1160,16 +1338,16 @@ def game_loop():
                                             equiped_weapon = Fists
                                         else:
                                             equiped_weapon.update({"durability":durability})
-                                    message = Fore.GREEN + "You attack the monster with your {} and do {} damage".format(equiped_weapon.get("name"), equiped_weapon.get("effect")) + Style.RESET_ALL
+                                    message = Fore.GREEN + "You attack the monster with your {} and do {} damage.".format(equiped_weapon.get("name"), equiped_weapon.get("effect")) + Style.RESET_ALL
                                     monster_health -= equiped_weapon.get("effect")
                                 else:
-                                    message = Fore.RED + "You swing with your {} but you miss".format(equiped_weapon.get("name")) + Style.RESET_ALL
+                                    message = Fore.RED + "You swing with your {} but you miss.".format(equiped_weapon.get("name")) + Style.RESET_ALL
                             elif (player_move.capitalize() == "Wait") or (player_move.capitalize() == "2"):
                                 add_health = random.randint(1,4)*2
                                 health += add_health
                                 if health > max_health:
                                     health = max_health
-                                message = Fore.BLUE + "You rest and gain {} health".format(add_health) + Style.RESET_ALL
+                                message = Fore.BLUE + "You rest and gain {} health.".format(add_health) + Style.RESET_ALL
                             elif (player_move.capitalize() == "Run") or (player_move.capitalize() == "3"):
                                 if len(inventory) <= 2:
                                     run_away_chance = random.randint(0,1)
@@ -1188,7 +1366,7 @@ def game_loop():
                                     break
                                 else:
                                     health -= 10
-                                    message = Fore.RED + "You don't manage to escape the monster, -10 health" + Style.RESET_ALL
+                                    message = Fore.RED + "You don't manage to escape the monster, -10 health." + Style.RESET_ALL
                                 continue
                             elif (player_move.capitalize() == "Change") or (player_move.capitalize() == "Change weapon") or (player_move.capitalize() == "4"):
                                 missing_item = True
@@ -1206,11 +1384,11 @@ def game_loop():
                                         equiped_weapon = item
                                         missing_item = False
                                 if missing_item == True:
-                                    message = Fore.RED + "You don't have '{}'".format(weapon_change) + Style.RESET_ALL
+                                    message = Fore.RED + "You don't have '{}'.".format(weapon_change) + Style.RESET_ALL
                                 continue
                             else:
                                 fumble_damage = random.randint(1,3)*2
-                                message = Fore.BLUE+"You fumble around while chosing what to do. " + Fore.RED + "-{} health".format(fumble_damage)+Style.RESET_ALL
+                                message = Fore.BLUE+"You fumble around while chosing what to do. " + Fore.RED + "-{} health.".format(fumble_damage)+Style.RESET_ALL
                                 health -= fumble_damage
                             # exit player turn
                             break
@@ -1219,11 +1397,12 @@ def game_loop():
                                 fighting = False
                                 break
                             if monster_health <= 0:
+                                kills += 1
                                 fighting = False
                                 monster_loot = random.choice(random.choice([foods, tools]))
                                 inventory.append(monster_loot)
                                 gold += 30
-                                message = Fore.GREEN + "You killed a monster and got a {} and 30 gold".format(monster_loot.get("name")) + Style.RESET_ALL
+                                message = Fore.GREEN + "You killed a monster and got a {} and 30 gold.".format(monster_loot.get("name")) + Style.RESET_ALL
                                 break
                             clear_screen()
                             print_monster(monster_health, SIZE)
@@ -1307,7 +1486,7 @@ def game_loop():
                             take_item_from_body = input("\nThere is a {} that you think you can take. Do you take it?\n(y/n)\n> ".format(item_on_body.get("name"))).lower()
                             if take_item_from_body == "y":
                                 inventory.append(item_on_body)
-                                message = Fore.MAGENTA+"You got a {}".format(item_on_body.get("name"))+Style.RESET_ALL
+                                message = Fore.MAGENTA+"You got a {}.".format(item_on_body.get("name"))+Style.RESET_ALL
                         else:
                             message = Fore.MAGENTA+"You leave the open grave and continue on your journey."+Style.RESET_ALL
                     else:
@@ -1346,16 +1525,16 @@ def game_loop():
                                             equiped_weapon = Fists
                                         else:
                                             equiped_weapon.update({"durability":durability})
-                                    message = Fore.GREEN + "You attack the monster with your {} and do {} damage".format(equiped_weapon.get("name"), equiped_weapon.get("effect")) + Style.RESET_ALL
+                                    message = Fore.GREEN + "You attack the monster with your {} and do {} damage.".format(equiped_weapon.get("name"), equiped_weapon.get("effect")) + Style.RESET_ALL
                                     monster_health -= equiped_weapon.get("effect")
                                 else:
-                                    message = Fore.RED + "You swing with your {} but you miss".format(equiped_weapon.get("name")) + Style.RESET_ALL
+                                    message = Fore.RED + "You swing with your {} but you miss.".format(equiped_weapon.get("name")) + Style.RESET_ALL
                             elif (player_move.capitalize() == "Wait") or (player_move.capitalize() == "2"):
                                 add_health = random.randint(1,4)*2
                                 health += add_health
                                 if health > max_health:
                                     health = max_health
-                                message = Fore.BLUE + "You rest and gain {} health".format(add_health) + Style.RESET_ALL
+                                message = Fore.BLUE + "You rest and gain {} health.".format(add_health) + Style.RESET_ALL
                             elif (player_move.capitalize() == "Run") or (player_move.capitalize() == "3"):
                                 if len(inventory) <= 2:
                                     run_away_chance = random.randint(0,1)
@@ -1374,7 +1553,7 @@ def game_loop():
                                     break
                                 else:
                                     health -= 10
-                                    message = Fore.RED + "You don't manage to escape the monster, -10 health" + Style.RESET_ALL
+                                    message = Fore.RED + "You don't manage to escape the monster, -10 health." + Style.RESET_ALL
                                 continue
                             elif (player_move.capitalize() == "Change") or (player_move.capitalize() == "Change weapon") or (player_move.capitalize() == "4"):
                                 missing_item = True
@@ -1392,11 +1571,11 @@ def game_loop():
                                         equiped_weapon = item
                                         missing_item = False
                                 if missing_item == True:
-                                    message = Fore.RED + "You don't have '{}'".format(weapon_change) + Style.RESET_ALL
+                                    message = Fore.RED + "You don't have '{}'.".format(weapon_change) + Style.RESET_ALL
                                 continue
                             else:
                                 fumble_damage = random.randint(1,3)*2
-                                message = Fore.BLUE+"You fumble around while chosing what to do. " + Fore.RED + "-{} health".format(fumble_damage)+Style.RESET_ALL
+                                message = Fore.BLUE+"You fumble around while chosing what to do. " + Fore.RED + "-{} health.".format(fumble_damage)+Style.RESET_ALL
                                 health -= fumble_damage
                             # exit player turn
                             break
@@ -1405,11 +1584,12 @@ def game_loop():
                                 fighting = False
                                 break
                             if monster_health <= 0:
+                                kills += 1
                                 fighting = False
                                 monster_loot = random.choice(random.choice([foods, tools]))
                                 inventory.append(monster_loot)
                                 gold += 30
-                                message = Fore.GREEN + "You killed a monster and got a {} and 30 gold".format(monster_loot.get("name")) + Style.RESET_ALL
+                                message = Fore.GREEN + "You killed a monster and got a {} and 30 gold.".format(monster_loot.get("name")) + Style.RESET_ALL
                                 break
                             clear_screen()
                             print_monster(monster_health, SIZE)
@@ -1474,7 +1654,7 @@ def game_loop():
                         for item in potato_shop1:
                             if buy_item == item.get("name"):
                                 if gold < item.get("value"):
-                                    message = Fore.RED + "You don't have enough money to afford {}".format(item.get("name")) + Style.RESET_ALL
+                                    message = Fore.RED + "You don't have enough money to afford {}.".format(item.get("name")) + Style.RESET_ALL
                                     break
                                 else:
                                     print("Are you sure you want to buy 1 {} for {}G.".format(item.get("name"), item.get("value")))
@@ -1529,16 +1709,16 @@ def game_loop():
                                         equiped_weapon = Fists
                                     else:
                                         equiped_weapon.update({"durability":durability})
-                                message = Fore.GREEN + "You attack the monster with your {} and do {} damage".format(equiped_weapon.get("name"), equiped_weapon.get("effect")) + Style.RESET_ALL
+                                message = Fore.GREEN + "You attack the monster with your {} and do {} damage.".format(equiped_weapon.get("name"), equiped_weapon.get("effect")) + Style.RESET_ALL
                                 monster_health -= equiped_weapon.get("effect")
                             else:
-                                message = Fore.RED + "You swing with your {} but you miss".format(equiped_weapon.get("name")) + Style.RESET_ALL
+                                message = Fore.RED + "You swing with your {} but you miss.".format(equiped_weapon.get("name")) + Style.RESET_ALL
                         elif (player_move.capitalize() == "Wait") or (player_move.capitalize() == "2"):
                             add_health = random.randint(1,4)*2
                             health += add_health
                             if health > max_health:
                                 health = max_health
-                            message = Fore.BLUE + "You rest and gain {} health".format(add_health) + Style.RESET_ALL
+                            message = Fore.BLUE + "You rest and gain {} health.".format(add_health) + Style.RESET_ALL
                         elif (player_move.capitalize() == "Run") or (player_move.capitalize() == "3"):
                             if len(inventory) <= 2:
                                 run_away_chance = random.randint(0,1)
@@ -1557,7 +1737,7 @@ def game_loop():
                                 break
                             else:
                                 health -= 10
-                                message = Fore.RED + "You don't manage to escape the monster, -10 health" + Style.RESET_ALL
+                                message = Fore.RED + "You don't manage to escape the monster, -10 health." + Style.RESET_ALL
                             continue
                         elif (player_move.capitalize() == "Change") or (player_move.capitalize() == "Change weapon") or (player_move.capitalize() == "4"):
                             missing_item = True
@@ -1575,11 +1755,11 @@ def game_loop():
                                     equiped_weapon = item
                                     missing_item = False
                             if missing_item == True:
-                                message = Fore.RED + "You don't have '{}'".format(weapon_change) + Style.RESET_ALL
+                                message = Fore.RED + "You don't have '{}'.".format(weapon_change) + Style.RESET_ALL
                             continue
                         else:
                             fumble_damage = random.randint(1,3)*2
-                            message = Fore.BLUE+"You fumble around while chosing what to do. " + Fore.RED + "-{} health".format(fumble_damage)+Style.RESET_ALL
+                            message = Fore.BLUE+"You fumble around while chosing what to do. " + Fore.RED + "-{} health.".format(fumble_damage)+Style.RESET_ALL
                             health -= fumble_damage
                         # exit player turn
                         break
@@ -1592,8 +1772,9 @@ def game_loop():
                             monster1_respawn = turn + random.randint(2,5)
                             monster_loot = random.choice(foods)
                             inventory.append(monster_loot)
+                            kills += 1
                             monster1 = None
-                            message = Fore.GREEN + "You killed a monster and got a {}".format(monster_loot.get("name")) + Style.RESET_ALL
+                            message = Fore.GREEN + "You killed a monster and got a {}.".format(monster_loot.get("name")) + Style.RESET_ALL
                             break
                         clear_screen()
                         print_monster(monster_health, SIZE)
@@ -1644,16 +1825,16 @@ def game_loop():
                                         equiped_weapon = Fists
                                     else:
                                         equiped_weapon.update({"durability":durability})
-                                message = Fore.GREEN + "You attack the monster with your {} and do {} damage".format(equiped_weapon.get("name"), equiped_weapon.get("effect")) + Style.RESET_ALL
+                                message = Fore.GREEN + "You attack the monster with your {} and do {} damage.".format(equiped_weapon.get("name"), equiped_weapon.get("effect")) + Style.RESET_ALL
                                 monster_health -= equiped_weapon.get("effect")
                             else:
-                                message = Fore.RED + "You swing with your {} but you miss".format(equiped_weapon.get("name")) + Style.RESET_ALL
+                                message = Fore.RED + "You swing with your {} but you miss.".format(equiped_weapon.get("name")) + Style.RESET_ALL
                         elif (player_move.capitalize() == "Wait") or (player_move.capitalize() == "2"):
                             add_health = random.randint(1,4)*2
                             health += add_health
                             if health > max_health:
                                 health = max_health
-                            message = Fore.BLUE + "You rest and gain {} health".format(add_health) + Style.RESET_ALL
+                            message = Fore.BLUE + "You rest and gain {} health.".format(add_health) + Style.RESET_ALL
                         elif (player_move.capitalize() == "Run") or (player_move.capitalize() == "3"):
                             if len(inventory) <= 2:
                                 run_away_chance = random.randint(0,1)
@@ -1672,7 +1853,7 @@ def game_loop():
                                 break
                             else:
                                 health -= 10
-                                message = Fore.RED + "You don't manage to escape the monster, -10 health" + Style.RESET_ALL
+                                message = Fore.RED + "You don't manage to escape the monster, -10 health." + Style.RESET_ALL
                             continue
                         elif (player_move.capitalize() == "Change") or (player_move.capitalize() == "Change weapon") or (player_move.capitalize() == "4"):
                             missing_item = True
@@ -1690,11 +1871,11 @@ def game_loop():
                                     equiped_weapon = item
                                     missing_item = False
                             if missing_item == True:
-                                message = Fore.RED + "You don't have '{}'".format(weapon_change) + Style.RESET_ALL
+                                message = Fore.RED + "You don't have '{}'.".format(weapon_change) + Style.RESET_ALL
                             continue
                         else:
                             fumble_damage = random.randint(1,3)*2
-                            message = Fore.BLUE+"You fumble around while chosing what to do. " + Fore.RED + "-{} health".format(fumble_damage)+Style.RESET_ALL
+                            message = Fore.BLUE+"You fumble around while chosing what to do. " + Fore.RED + "-{} health.".format(fumble_damage)+Style.RESET_ALL
                             health -= fumble_damage
                         # exit player turn
                         break
@@ -1707,8 +1888,9 @@ def game_loop():
                             monster2_respawn = turn + random.randint(2,5)
                             monster_loot = random.choice(foods)
                             inventory.append(monster_loot)
+                            kills += 1
                             monster2 = None
-                            message = Fore.GREEN + "You killed a monster and got a {}".format(monster_loot.get("name")) + Style.RESET_ALL
+                            message = Fore.GREEN + "You killed a monster and got a {}.".format(monster_loot.get("name")) + Style.RESET_ALL
                             break
                         clear_screen()
                         print_monster(monster_health, SIZE)
@@ -1759,16 +1941,16 @@ def game_loop():
                                         equiped_weapon = Fists
                                     else:
                                         equiped_weapon.update({"durability":durability})
-                                message = Fore.GREEN + "You attack the monster with your {} and do {} damage".format(equiped_weapon.get("name"), equiped_weapon.get("effect")) + Style.RESET_ALL
+                                message = Fore.GREEN + "You attack the monster with your {} and do {} damage.".format(equiped_weapon.get("name"), equiped_weapon.get("effect")) + Style.RESET_ALL
                                 monster_health -= equiped_weapon.get("effect")
                             else:
-                                message = Fore.RED + "You swing with your {} but you miss".format(equiped_weapon.get("name")) + Style.RESET_ALL
+                                message = Fore.RED + "You swing with your {} but you miss.".format(equiped_weapon.get("name")) + Style.RESET_ALL
                         elif (player_move.capitalize() == "Wait") or (player_move.capitalize() == "2"):
                             add_health = random.randint(1,4)*2
                             health += add_health
                             if health > max_health:
                                 health = max_health
-                            message = Fore.BLUE + "You rest and gain {} health".format(add_health) + Style.RESET_ALL
+                            message = Fore.BLUE + "You rest and gain {} health.".format(add_health) + Style.RESET_ALL
                         elif (player_move.capitalize() == "Run") or (player_move.capitalize() == "3"):
                             if len(inventory) <= 2:
                                 run_away_chance = random.randint(0,1)
@@ -1787,7 +1969,7 @@ def game_loop():
                                 break
                             else:
                                 health -= 10
-                                message = Fore.RED + "You don't manage to escape the monster, -10 health" + Style.RESET_ALL
+                                message = Fore.RED + "You don't manage to escape the monster, -10 health." + Style.RESET_ALL
                             continue
                         elif (player_move.capitalize() == "Change") or (player_move.capitalize() == "Change weapon") or (player_move.capitalize() == "4"):
                             missing_item = True
@@ -1822,8 +2004,9 @@ def game_loop():
                             monster3_respawn = turn + random.randint(2,5)
                             monster_loot = random.choice(foods)
                             inventory.append(monster_loot)
+                            kills += 1
                             monster3 = None
-                            message = Fore.GREEN + "You killed a monster and got a {}".format(monster_loot.get("name")) + Style.RESET_ALL
+                            message = Fore.GREEN + "You killed a monster and got a {}.".format(monster_loot.get("name")) + Style.RESET_ALL
                             break
                         clear_screen()
                         print_monster(monster_health, SIZE)
@@ -1854,7 +2037,7 @@ def game_loop():
 
         # error message if the player makes a move that is not valid
         else:
-            message = (Fore.RED+"That is not a valid move"+Style.RESET_ALL)
+            message = (Fore.RED+"That is not a valid move."+Style.RESET_ALL)
 
 
     # if the game ends
