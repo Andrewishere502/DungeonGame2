@@ -435,7 +435,7 @@ def game_loop():
     max_hunger = 100
     armour = 0
     max_armour = 100
-    gold = 1000000
+    gold = 10
     fashion = 0
     kills = 0
 
