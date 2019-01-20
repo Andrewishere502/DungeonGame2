@@ -421,7 +421,7 @@ def tutorial():
     print("Everytime you eat something or wear something, it will disappear from your inventory and there is no way to be able to get it back")
     print("Another thing you might want to note is that you should READ THE WORDS on the page. Just be patient please, this is only the first real game I've made.")
     print("Thanks for playing!")
-    print("-MegaMogul")
+    print("-MegaMogul and Leoisveryhappy")
     input("\nPress return to continue:")
     clear_screen()
 
@@ -745,7 +745,7 @@ def game_loop():
 
                 print("What would you like to eat? ('exit' to exit)")
                 eat = input("> ").capitalize()
-                if eat.lower() == "exit":
+                if eat == "Exit":
                     break
                 for item in inventory:
                     if eat == item.get("name") and item.get("type") == "food":
@@ -754,12 +754,13 @@ def game_loop():
                         if hunger > max_hunger:
                             hunger = max_hunger
                         inventory.remove(item)
-                        durability = item.pop("durability")
+                        durability = item.get("durability")
                         durability -= 1
-                        item.update({"durability":durability})
-                        if durability == 0:
+                        if durability <= 0:
                             message = (Fore.BLUE+"You finished the {}. +{} hunger.".format(item.get("name"), item.get("effect"))+Style.RESET_ALL)
+                            break
                         else:
+                            item.update({"durability":durability})
                             message = (Fore.BLUE+"You ate a piece of the {}. +{} hunger.".format(item.get("name"), item.get("effect"))+Style.RESET_ALL)
                             inventory.append(item)
                             break
