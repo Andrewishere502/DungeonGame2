@@ -435,7 +435,7 @@ def game_loop():
     max_hunger = 100
     armour = 0
     max_armour = 100
-    gold = 10
+    gold = 1000000
     fashion = 0
     kills = 0
 
@@ -1231,7 +1231,7 @@ def game_loop():
                                 continue
                             else:
                                 gold -= bet
-                                pot += bet
+                                pot += bet *2
                                 message = Fore.YELLOW + "Pot: " + str(pot) + Style.RESET_ALL
                                 choosing_hit_stand_fold = True
                                 while choosing_hit_stand_fold == True:
@@ -1263,8 +1263,6 @@ def game_loop():
                                     elif (hit_stand_fold == "Stand") or (hit_stand_fold == "2"):
                                         hit_stand_fold ="Stand"
                                         choosing_hit_stand_fold = False
-                                    elif (hit_stand_fold == "Fold") or (hit_stand_fold == "3"):
-                                        input("under construction")
                                     else:
                                         message = Fore.RED + "Please write only 'Hit' 'Stand' or 'Fold'" + Style.RESET_ALL
                                         continue
@@ -1274,7 +1272,6 @@ def game_loop():
                                 message = Fore.RED + "You busted, you lose." + Style.RESET_ALL
                                 break
 
-                            pot += bet
                             c_hit_stand_fold = "Hit"
                             if (total_c_cards >= 16) and (total_c_cards <= 21):
                                 c_hit_stand_fold = "Stand"
@@ -1289,22 +1286,28 @@ def game_loop():
                                 break
 
                             if c_hit_stand_fold == "Stand" and hit_stand_fold == "Stand":
-                                input("> ")
+                                print(total_c_cards)
+                                print(total_p_cards)
                                 total_p_cards = 0
                                 for card in your_cards:
                                     total_p_cards += card
                                 total_c_cards = 0
-                                for card in your_cards:
+                                for card in computer_cards:
                                     total_c_cards += card
+                                print(total_c_cards)
+                                print(total_p_cards)
+                                input("> ")
                                 if total_p_cards > total_c_cards:
                                     message = Fore.GREEN + "You win! +{}".format(pot) + Style.RESET_ALL
                                     gold += pot
                                     break
                                 elif total_p_cards < total_c_cards:
                                     message = Fore.RED + "You lose :(" + Style.RESET_ALL
+                                    break
                                 else:
-                                    message =  Fore.BLUE + "You win! +{}".format(pot) + Style.RESET_ALL
+                                    message =  Fore.BLUE + "You tie +{}".format(pot) + Style.RESET_ALL
                                     gold += round(pot/2)
+                                    break
                             else:
                                 continue
                     else:
