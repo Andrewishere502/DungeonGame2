@@ -305,12 +305,12 @@ def print_death(turn, health, hunger, gold, kills, fashion):
         """)
     print("Turn: {} | Health: {} | Hunger: {} | Gold: {} | Kills: {} | Fashion: {} ".format(turn, health, hunger, gold, kills, fashion))
     print("-"*2*SIZE+"---")
-def print_UI(turn, health, hunger, armour, gold):
+def print_UI(turn, health, hunger, gold):
     if hunger <= 10:
         hunger = Fore.RED + str(hunger) + Style.RESET_ALL
     if health <= 10:
         health = Fore.RED + str(health) + Style.RESET_ALL
-    print("Turn: {} | Health: {} | Hunger: {} | Armour: {} | Gold: {} ".format(turn, health, hunger, armour, gold))
+    print("Turn: {} | Health: {} | Hunger: {} | Gold: {} ".format(turn, health, hunger, gold))
     hunger = Style.RESET_ALL + str(hunger)
     health = Style.RESET_ALL + str(health)
     print("-"*2*SIZE+"---")
@@ -323,8 +323,6 @@ def print_inventory(inventory):
             print("-", item.get("name"), "  Durability:", item.get("durability"), "  Damage:", item.get("effect"))
         elif item.get("type") == "food":
             print("-", item.get("name"), "  Durability:", item.get("durability"), "  Feeding Power:", item.get("effect"))
-        elif item.get("type") == "armour":
-            print("-", item.get("name"), "  Durability:", item.get("durability"), "  Armour Power:", item.get("effect"))
         elif item.get("name") == "Brown fluffy jacket":
             print("-", item.get("name"), Fore.GREEN+" SPECIAL: Heals 2 per turn."+Style.RESET_ALL)
         elif item.get("name") == "Volleyball":
@@ -418,10 +416,9 @@ def tutorial():
     print("This is a small adventure game where you, the player, move around a map collecting loot. It's not all fun and games though, if you don't keep your hunger and health up you will die and lose all your progress.")
     print("Anyway, now on to the controls and stuff.")
     print("Every time you want to complete an action you need to click return. Yes, that means you can't just click the arrow keys, you need to type 'n', 's', 'e' or 'w' AND THEN click enter to move.")
-    print("Everytime you eat something or wear something, it will disappear from your inventory and there is no way to be able to get it back")
     print("Another thing you might want to note is that you should READ THE WORDS on the page. Just be patient please, this is only the first real game I've made.")
     print("Thanks for playing!")
-    print("-MegaMogul and Leoisveryhappy")
+    print("-MegaMogul")
     input("\nPress return to continue:")
     clear_screen()
 
@@ -433,8 +430,6 @@ def game_loop():
     max_health = 100
     hunger = 100
     max_hunger = 100
-    armour = 0
-    max_armour = 100
     gold = 10
     fashion = 0
     kills = 0
@@ -531,33 +526,7 @@ def game_loop():
         "value":35,
         "type":"weapon"
         }]
-    clothes = [{
-        "name":"Baseball cap",
-        "durability":1,
-        "effect":5,
-        "value":10,
-        "type":"armour"
-        },{
-        "name":"Helmet",
-        "durability":1,
-        "effect":30,
-        "value":50,
-        "type":"armour"
-        },{
-        "name":"Shoulder guard",
-        "durability":1,
-        "effect":20,
-        "value":30,
-        "type":"armour"
-        },{
-        "name":"Bulletproof vest",
-        "durability":1,
-        "effect":80,
-        "value":100,
-        "type":"armour"
-        }]
-    # inventory starts with food, random armour, and a random weapon, the max items in the inventory is 7
-    
+    # inventory starts with food and a random weapon, the max items in the inventory is 7
     inventory = [{
         "name":"Energy bar",
         "durability":1,
@@ -566,7 +535,6 @@ def game_loop():
         "type":"food"
         }]
     inventory.append(random.choice(tools))
-    inventory.append(random.choice(clothes))
     # shop items
     items_in_shop1 = []
     items_in_shop1.extend(random.sample(tools, 3))
@@ -598,11 +566,8 @@ def game_loop():
         }]
     # fill chests
     items_in_chest1 = random.sample(misc, 2)
-    items_in_chest1.append(random.choice(clothes))
     items_in_chest2 = random.sample(tools, 1)
-    items_in_chest2.append(random.choice(clothes))
     items_in_chest3 = random.sample(foods, 2)
-    items_in_chest3.append(random.choice(clothes))
     
     # generate random mysterious events for the mysterious tiles
     generate_mysterious_event = ["gold", "dead body", "ambush"]
@@ -635,8 +600,7 @@ def game_loop():
         clear_screen()
         draw_map(
             monster1, monster2, monster3,
-            potato_farm, 
-            mysterious1, mysterious2,
+            potato_farm, mysterious1, mysterious2,
             shop1,
             casino1,
             chest1, chest2, chest3,
@@ -644,7 +608,7 @@ def game_loop():
             player,
             SIZE)
         valid_moves = get_moves(player, SIZE)
-        print_UI(turn, health, hunger, armour, gold)
+        print_UI(turn, health, hunger, gold)
         if show_inventory == False:
             pass
         else:
@@ -686,7 +650,6 @@ def game_loop():
             print("- '??' to get help")
             print("- 'II' or 'ii' to toggle inventory")
             print("- 'Eat' or 'eat' to eat something")
-            print("- 'Wear' or 'wear' to wear something")
             input("\nPress return to continue:")
         elif move == "II":
             if show_inventory == True:
@@ -694,38 +657,6 @@ def game_loop():
             elif show_inventory == False:
                 show_inventory = True
             continue
-        elif move == "WEAR":
-            while True:
-                clear_screen()
-                draw_map(
-                    monster1, monster2, monster3,
-                    potato_farm,
-                    mysterious1, mysterious2,
-                    shop1,
-                    casino1,
-                    chest1, chest2, chest3,
-                    berries1, berries2, berries3,
-                    player,
-                    SIZE)
-
-                print_UI(turn, health, hunger, armour, gold)
-                print_inventory(inventory)
-                return_message(message, SIZE)
-
-                print("What would you like to wear? ('exit' to exit')")
-                wear = input("> ").capitalize()
-                if wear.lower() == "exit":
-                    break
-                for item in inventory:
-                    if wear == item.get("name") and item.get("type") == "armour":
-                        add_armour = item.get("effect")
-                        armour += add_armour
-                        if armour > max_armour:
-                            armour = max_armour
-                        inventory.remove(item)
-                        message = (Fore.BLUE+"You wore the {}.".format(wear)+Style.RESET_ALL)
-                    else:
-                        message = (Fore.RED+"You can not wear '{}'.".format(wear)+Style.RESET_ALL)
         elif move == "EAT":
             while True:
                 clear_screen()
@@ -739,7 +670,7 @@ def game_loop():
                     player,
                     SIZE)
 
-                print_UI(turn, health, hunger, armour, gold)
+                print_UI(turn, health, hunger, gold)
                 print_inventory(inventory)
                 return_message(message, SIZE)
 
@@ -770,8 +701,9 @@ def game_loop():
             # update where the player is
             player, message, health = move_player(default_message, health, max_health, player, move)
             # auto move player for testing hehe
-            # mysterious1_event = "ambush"
-            # player = mysterious1
+            # casino1 = (0,0)
+            # player = casino1
+
 
         #
         # hunger and turn management area
@@ -783,11 +715,11 @@ def game_loop():
             # lose health when starving
             if hunger <= 0:
                 hunger = 0
-                health -= 15
+                health -= 10
                 message = Fore.RED + ("You are starving! {} turns left to eat something.".format(health/10)) + Style.RESET_ALL
             # if the player is on a berry tile, they eat it
             if (player == berries1) or (player == berries2) or (player == berries3):
-                hunger += 10
+                hunger += 15
                 if hunger > max_hunger:
                     hunger = max_hunger
                 if player == berries1:
@@ -815,7 +747,7 @@ def game_loop():
                         berries1, berries2, berries3,
                         player,
                         SIZE)
-                    print_UI(turn, health, hunger, armour, gold)
+                    print_UI(turn, health, hunger, gold)
                     return_message(message, SIZE)
 
                     # show items in the chest
@@ -866,7 +798,7 @@ def game_loop():
                         berries1, berries2, berries3,
                         player,
                         SIZE)
-                    print_UI(turn, health, hunger, armour, gold)
+                    print_UI(turn, health, hunger, gold)
                     return_message(message, SIZE)
 
                     # show items in the chest
@@ -917,7 +849,7 @@ def game_loop():
                         berries1, berries2, berries3,
                         player,
                         SIZE)
-                    print_UI(turn, health, hunger, armour, gold)
+                    print_UI(turn, health, hunger, gold)
                     return_message(message, SIZE)
 
                     # show items in the chest
@@ -965,7 +897,7 @@ def game_loop():
                 while True:
                     clear_screen()
                     print_shop_keeper(SIZE)
-                    print_UI(turn, health, hunger, armour, gold)
+                    print_UI(turn, health, hunger, gold)
                     print_inventory(inventory)
                     print("Shop items:")
                     for item in items_in_shop1:
@@ -1036,7 +968,7 @@ def game_loop():
                 while True:
                     clear_screen()
                     print_casino(SIZE)
-                    print_UI(turn, health, hunger, armour, gold)
+                    print_UI(turn, health, hunger, gold)
                     return_message(message, SIZE)
                     message = default_message
                     print("Which game would you like to play? ('more' for info)")
@@ -1138,7 +1070,7 @@ def game_loop():
                     elif (game.capitalize() == "Blackjack") or (game == "4"):
                         clear_screen()
                         print_casino(SIZE)
-                        print_UI(turn, health, hunger, armour, gold)
+                        print_UI(turn, health, hunger, gold)
                         return_message(message, SIZE)
                         # the ante is how much it costs to play
                         if gold < 50:
@@ -1152,7 +1084,7 @@ def game_loop():
                             pot += 5
                             clear_screen()
                             print_casino(SIZE)
-                            print_UI(turn, health, hunger, armour, gold)
+                            print_UI(turn, health, hunger, gold)
                             return_message(message, SIZE)
                             message = Fore.YELLOW + "Pot: " + str(pot) + Style.RESET_ALL
                         else:
@@ -1197,7 +1129,7 @@ def game_loop():
                         while betting == True:
                             clear_screen()
                             print_casino(SIZE)
-                            print_UI(turn, health, hunger, armour, gold)
+                            print_UI(turn, health, hunger, gold)
                             return_message(message, SIZE)
                             message = Fore.YELLOW + "Pot: " + str(pot) + Style.RESET_ALL
                             print("Computer cards:")
@@ -1238,7 +1170,7 @@ def game_loop():
                                 while choosing_hit_stand_fold == True:
                                     clear_screen()
                                     print_casino(SIZE)
-                                    print_UI(turn, health, hunger, armour, gold)
+                                    print_UI(turn, health, hunger, gold)
                                     return_message(message, SIZE)
                                     print("Computer cards:")
                                     show_card1 = computer_cards[0]
@@ -1254,7 +1186,7 @@ def game_loop():
                                     print(Fore.GREEN + "Total of your cards:", str(total_p_cards) + Style.RESET_ALL)
                                     print("-"*2*SIZE+"---")
                                     print(Fore.RED + "Don't go over 21!" + Style.RESET_ALL)
-                                    hit_stand_fold = input("1)Hit  2)Stand  3)Fold\n> ").capitalize()
+                                    hit_stand_fold = input("1)Hit  2)Stand\n> ").capitalize()
                                     if (hit_stand_fold == "Hit") or (hit_stand_fold == "1"):
                                         add_card = random.choice(cards)
                                         cards.remove(add_card)
@@ -1287,17 +1219,12 @@ def game_loop():
                                 break
 
                             if c_hit_stand_fold == "Stand" and hit_stand_fold == "Stand":
-                                print(total_c_cards)
-                                print(total_p_cards)
                                 total_p_cards = 0
                                 for card in your_cards:
                                     total_p_cards += card
                                 total_c_cards = 0
                                 for card in computer_cards:
                                     total_c_cards += card
-                                print(total_c_cards)
-                                print(total_p_cards)
-                                input("> ")
                                 if total_p_cards > total_c_cards:
                                     message = Fore.GREEN + "You win! +{}".format(pot) + Style.RESET_ALL
                                     gold += pot
@@ -1353,11 +1280,11 @@ def game_loop():
                             fashion += 3
                         elif name_tag == "Ben":
                             item_on_body = {
-                            "name":"Baseball cap",
-                            "durability":3,
-                            "effect":5,
-                            "value":10,
-                            "type":"armour"
+                            "name":"Baseball bat",
+                            "durability":4,
+                            "effect":13,
+                            "value":60,
+                            "type":"weapon"
                             }
                         elif name_tag == "Kate":
                             item_on_body = {
@@ -1395,7 +1322,7 @@ def game_loop():
                         while True:
                             clear_screen()
                             print_monster(monster_health, SIZE)
-                            print_UI(turn, health, hunger, armour, gold)
+                            print_UI(turn, health, hunger, gold)
                             return_message(message, SIZE)
                             message = default_message
                             # players turn
@@ -1482,32 +1409,25 @@ def game_loop():
                             if monster_health <= 0:
                                 kills += 1
                                 fighting = False
-                                monster_loot = random.choice(random.choice([foods, tools, clothes]))
+                                monster_loot = random.choice(random.choice([foods, tools]))
                                 inventory.append(monster_loot)
                                 gold += 30
                                 message = Fore.GREEN + "You killed a monster and got a {} and 30 gold.".format(monster_loot.get("name")) + Style.RESET_ALL
                                 break
                             clear_screen()
                             print_monster(monster_health, SIZE)
-                            print_UI(turn, health, hunger, armour, gold)
+                            print_UI(turn, health, hunger, gold)
                             return_message(message, SIZE)
                             message = default_message
                             time.sleep(1)
                             # monsters turn
-                            original_armour = armour
                             monster_damage = random.randint(1,3)*3
-                            if monster_damage > armour:
-                                monster_damage -= armour
-                                armour = 0
-                            else:
-                                armour -= monster_damage
-                                monster_damage = 0
                             health -= monster_damage
                             if health <= 0:
                                 fighting = False
                                 break
-                            message = Fore.RED + "The monster claws you. -{} health, -{} armour.".format(monster_damage, original_armour - armour) + Style.RESET_ALL
-                            # exit monsters turn
+                            message = Fore.RED + "The monster claws you. -{} health.".format(monster_damage) + Style.RESET_ALL
+                            # exit player turn
                             break
 
                 mysterious1 = None
@@ -1589,7 +1509,7 @@ def game_loop():
                         while True:
                             clear_screen()
                             print_monster(monster_health, SIZE)
-                            print_UI(turn, health, hunger, armour, gold)
+                            print_UI(turn, health, hunger, gold)
                             return_message(message, SIZE)
                             message = default_message
                             # players turn
@@ -1676,32 +1596,25 @@ def game_loop():
                             if monster_health <= 0:
                                 kills += 1
                                 fighting = False
-                                monster_loot = random.choice(random.choice([foods, tools, clothes]))
+                                monster_loot = random.choice(random.choice([foods, tools]))
                                 inventory.append(monster_loot)
                                 gold += 30
                                 message = Fore.GREEN + "You killed a monster and got a {} and 30 gold.".format(monster_loot.get("name")) + Style.RESET_ALL
                                 break
                             clear_screen()
                             print_monster(monster_health, SIZE)
-                            print_UI(turn, health, hunger, armour, gold)
+                            print_UI(turn, health, hunger, gold)
                             return_message(message, SIZE)
                             message = default_message
                             time.sleep(1)
                             # monsters turn
-                            original_armour = armour
-                            monster_damage = random.randint(1,4)*4
-                            if monster_damage > armour:
-                                monster_damage -= armour
-                                armour = 0
-                            else:
-                                armour -= monster_damage
-                                monster_damage = 0
+                            monster_damage = random.randint(1,3)*4
                             health -= monster_damage
                             if health <= 0:
                                 fighting = False
                                 break
-                            message = Fore.RED + "The monster claws you. -{} health, -{} armour.".format(monster_damage, original_armour - armour) + Style.RESET_ALL
-                            # exit monsters turn
+                            message = Fore.RED + "The monster claws you. -{} health.".format(monster_damage) + Style.RESET_ALL
+                            # exit player turn
                             break
 
                 mysterious2 = None
@@ -1728,7 +1641,7 @@ def game_loop():
                     berries1, berries2, berries3,
                     player,
                     SIZE)
-                print_UI(turn, health, hunger, armour, gold)
+                print_UI(turn, health, hunger, gold)
                 print_inventory(inventory)
                 return_message(message, SIZE)
                 print("A lady waves you over to her, she is standing behind\na small counter that says 'POTATO SALE'")
@@ -1738,7 +1651,7 @@ def game_loop():
                     while True:
                         clear_screen()
                         print_potato_farmer(SIZE)
-                        print_UI(turn, health, hunger, armour, gold)
+                        print_UI(turn, health, hunger, gold)
                         print_inventory(inventory)
                         return_message(message, SIZE)
                         print("Hello! I have some wares that I can sell you, take a look:")
@@ -1780,7 +1693,7 @@ def game_loop():
                     while True:
                         clear_screen()
                         print_monster(monster_health, SIZE)
-                        print_UI(turn, health, hunger, armour, gold)
+                        print_UI(turn, health, hunger, gold)
                         return_message(message, SIZE)
                         message = default_message
                         # players turn
@@ -1875,25 +1788,18 @@ def game_loop():
                             break
                         clear_screen()
                         print_monster(monster_health, SIZE)
-                        print_UI(turn, health, hunger, armour, gold)
+                        print_UI(turn, health, hunger, gold)
                         return_message(message, SIZE)
                         message = default_message
                         time.sleep(1)
                         # monsters turn
-                        original_armour = armour
-                        monster_damage = random.randint(1,3)*3
-                        if monster_damage > armour:
-                            monster_damage -= armour
-                            armour = 0
-                        else:
-                            armour -= monster_damage
-                            monster_damage = 0
+                        monster_damage = random.randint(1,3)*2
                         health -= monster_damage
                         if health <= 0:
                             fighting = False
                             break
-                        message = Fore.RED + "The monster claws you. -{} health, -{} armour.".format(monster_damage, original_armour - armour) + Style.RESET_ALL
-                        # exit monsters turn
+                        message = Fore.RED + "The monster claws you. -{} health.".format(monster_damage) + Style.RESET_ALL
+                        # exit player turn
                         break
 
             if (player == monster2):
@@ -1903,7 +1809,7 @@ def game_loop():
                     while True:
                         clear_screen()
                         print_monster(monster_health, SIZE)
-                        print_UI(turn, health, hunger, armour, gold)
+                        print_UI(turn, health, hunger, gold)
                         return_message(message, SIZE)
                         message = default_message
                         # players turn
@@ -1998,25 +1904,18 @@ def game_loop():
                             break
                         clear_screen()
                         print_monster(monster_health, SIZE)
-                        print_UI(turn, health, hunger, armour, gold)
+                        print_UI(turn, health, hunger, gold)
                         return_message(message, SIZE)
                         message = default_message
                         time.sleep(1)
                         # monsters turn
-                        original_armour = armour
-                        monster_damage = random.randint(1,3)*3
-                        if monster_damage > armour:
-                            monster_damage -= armour
-                            armour = 0
-                        else:
-                            armour -= monster_damage
-                            monster_damage = 0
+                        monster_damage = random.randint(1,3)*2
                         health -= monster_damage
                         if health <= 0:
                             fighting = False
                             break
-                        message = Fore.RED + "The monster claws you. -{} health, -{} armour.".format(monster_damage, original_armour - armour) + Style.RESET_ALL
-                        # exit monsters turn
+                        message = Fore.RED + "The monster claws you. -{} health.".format(monster_damage) + Style.RESET_ALL
+                        # exit player turn
                         break
 
             if (player == monster3):
@@ -2026,7 +1925,7 @@ def game_loop():
                     while True:
                         clear_screen()
                         print_monster(monster_health, SIZE)
-                        print_UI(turn, health, hunger, armour, gold)
+                        print_UI(turn, health, hunger, gold)
                         return_message(message, SIZE)
                         message = default_message
                         # players turn
@@ -2121,25 +2020,18 @@ def game_loop():
                             break
                         clear_screen()
                         print_monster(monster_health, SIZE)
-                        print_UI(turn, health, hunger, armour, gold)
+                        print_UI(turn, health, hunger, gold)
                         return_message(message, SIZE)
                         message = default_message
                         time.sleep(1)
                         # monsters turn
-                        original_armour = armour
-                        monster_damage = random.randint(1,3)*3
-                        if monster_damage > armour:
-                            monster_damage -= armour
-                            armour = 0
-                        else:
-                            armour -= monster_damage
-                            monster_damage = 0
+                        monster_damage = random.randint(1,3)*2
                         health -= monster_damage
                         if health <= 0:
                             fighting = False
                             break
-                        message = Fore.RED + "The monster claws you. -{} health, -{} armour.".format(monster_damage, original_armour - armour) + Style.RESET_ALL
-                        # exit monsters turn
+                        message = Fore.RED + "The monster claws you. -{} health.".format(monster_damage) + Style.RESET_ALL
+                        # exit player turn
                         break
 
 
