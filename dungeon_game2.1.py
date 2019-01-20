@@ -998,7 +998,9 @@ def game_loop():
                         except ValueError:
                             message = Fore.RED + "Please only type a number (ie '3')." + Style.RESET_ALL
                             continue
-                        if (bet < 1) or (bet > 5):
+                        if bet > gold:
+                            message = Fore.RED + "You don't have enough gold" + Style.RESET_ALL
+                        elif (bet < 1) or (bet > 5):
                             message = Fore.RED + "You must bet between 1 and 5." + Style.RESET_ALL
                             continue
                         else:
@@ -1025,7 +1027,9 @@ def game_loop():
                         except ValueError:
                             message = Fore.RED + "Please only type a number (ie '3')" + Style.RESET_ALL
                             continue
-                        if (bet < 1) or (bet > 10):
+                        if bet > gold:
+                            message = Fore.RED + "You don't have enough gold" + Style.RESET_ALL
+                        elif (bet < 1) or (bet > 10):
                             message = Fore.RED + "You must bet between 1 and 10" + Style.RESET_ALL
                             continue
                         else:
@@ -1056,7 +1060,9 @@ def game_loop():
                         except ValueError:
                             message = Fore.RED + "Please only type a number (ie '3')" + Style.RESET_ALL
                             continue
-                        if (bet < 1) or (bet > 15):
+                        if bet > gold:
+                            message = Fore.RED + "You don't have enough gold" + Style.RESET_ALL
+                        elif (bet < 1) or (bet > 15):
                             message = Fore.RED + "You must bet between 1 and 15" + Style.RESET_ALL
                             continue
                         else:
@@ -1150,9 +1156,6 @@ def game_loop():
                                 print("Card:", card)
                             print(Fore.GREEN + "Total of your cards:", str(total_p_cards) + Style.RESET_ALL)
                             print("-"*2*SIZE+"---")
-                            if gold < 5:
-                                message = Fore.RED + "You ran out of money that you could spend." + Style.RESET_ALL
-                                break
                             bet = input("How much would you like to bet? (5 to 100)\n> ")
                             try:
                                 bet = int(bet)
