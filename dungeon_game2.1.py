@@ -531,6 +531,13 @@ def game_loop():
         "value":35,
         "type":"weapon"
         }]
+    magic = [{
+        "name":"Magic potato",
+        "durability":1,
+        "effect":"100",
+        "value":"100",
+        "type":"magic"
+        }]
     clothes = [{
         "name":"Baseball cap",
         "durability":1,
@@ -595,6 +602,12 @@ def game_loop():
         "effect":9,
         "value":15,
         "type":"food"
+        },{
+        "name":"Magic potato",
+        "durability":1,
+        "effect":"100",
+        "value":"300",
+        "type":"magic"
         }]
     # fill chests
     items_in_chest1 = random.sample(misc, 2)
@@ -766,6 +779,19 @@ def game_loop():
                             break
                     else:
                         message = (Fore.RED+"You can not eat '{}'.".format(eat)+Style.RESET_ALL)
+                for magic in inventory:
+                    if eat == item.get("name") and item.get("type") == "magic":
+                        add_hunger = item.get("effect")
+                        add_health = item.get("effect")
+                        if hunger > max_hunger:
+                            hunger = max_hunger
+                        inventory.remove(item)
+                        durability = item.get("durability")
+                        durability -= 1
+                        if durability <= 0:
+                            message = (Fore.BLUE+"You finished the {}. +{} hunger. +{} health".format(item.get("name"), item.get("effect"), item.get ("effect"))+Style.RESET_ALL)
+                            break
+
         elif move in valid_moves:
             # update where the player is
             player, message, health = move_player(default_message, health, max_health, player, move)
