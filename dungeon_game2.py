@@ -676,7 +676,7 @@ def game_loop():
 
                 print("What would you like to eat? ('exit' to exit)")
                 eat = input("> ").capitalize()
-                if eat.lower() == "exit":
+                if eat == "Exit":
                     break
                 for item in inventory:
                     if eat == item.get("name") and item.get("type") == "food":
@@ -685,12 +685,13 @@ def game_loop():
                         if hunger > max_hunger:
                             hunger = max_hunger
                         inventory.remove(item)
-                        durability = item.pop("durability")
+                        durability = item.get("durability")
                         durability -= 1
-                        item.update({"durability":durability})
-                        if durability == 0:
+                        if durability <= 0:
                             message = (Fore.BLUE+"You finished the {}. +{} hunger.".format(item.get("name"), item.get("effect"))+Style.RESET_ALL)
+                            break
                         else:
+                            item.update({"durability":durability})
                             message = (Fore.BLUE+"You ate a piece of the {}. +{} hunger.".format(item.get("name"), item.get("effect"))+Style.RESET_ALL)
                             inventory.append(item)
                             break
