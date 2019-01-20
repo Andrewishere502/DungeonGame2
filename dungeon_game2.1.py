@@ -783,7 +783,7 @@ def game_loop():
             # lose health when starving
             if hunger <= 0:
                 hunger = 0
-                health -= 10
+                health -= 15
                 message = Fore.RED + ("You are starving! {} turns left to eat something.".format(health/10)) + Style.RESET_ALL
             # if the player is on a berry tile, they eat it
             if (player == berries1) or (player == berries2) or (player == berries3):
@@ -1353,7 +1353,7 @@ def game_loop():
                             fashion += 3
                         elif name_tag == "Ben":
                             item_on_body = {
-                            "name":"Baseball Cap",
+                            "name":"Baseball cap",
                             "durability":3,
                             "effect":5,
                             "value":10,
