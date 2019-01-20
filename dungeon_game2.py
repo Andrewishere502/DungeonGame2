@@ -719,7 +719,7 @@ def game_loop():
                 message = Fore.RED + ("You are starving! {} turns left to eat something.".format(health/10)) + Style.RESET_ALL
             # if the player is on a berry tile, they eat it
             if (player == berries1) or (player == berries2) or (player == berries3):
-                hunger += 10
+                hunger += 15
                 if hunger > max_hunger:
                     hunger = max_hunger
                 if player == berries1:
