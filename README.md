@@ -1,2 +1,2 @@
 # DungeonGame2
-This is the repository for my second DungeonGame.
+!! You must download the Colorama Library for this to work !!
